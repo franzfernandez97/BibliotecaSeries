@@ -18,7 +18,8 @@ class Config {
                 return [
                     'host' => $data['host'],
                     'user' => $data['user'],
-                    'password' => $data['password']
+                    'password' => $data['password'],
+                    'dbname' => $data['dbname']
                 ];
             } else {
                 // JSON decoding error

@@ -3,20 +3,20 @@ class Database{
     private $host;
     private $user;
     private $password;
-    private $db_name;
+    private $dbname;
     private $connection;
 
-    public function __construct($host, $user, $password, $db_name) {
+    public function __construct($host, $user, $password, $dbname) {
         $this->host = $host;
         $this->user = $user;
         $this->password = $password;
-        $this->db_name = $db_name;
+        $this->dbname = $dbname;
     }
 
     // metodo para conectar a la DB
     public function connect() {
 
-        $this->connection = new mysqli($this->host, $this->user, $this->password, $this->db_name);
+        $this->connection = new mysqli($this->host, $this->user, $this->password, $this->dbname);
 
         
         if ($this->connection->connect_error) {

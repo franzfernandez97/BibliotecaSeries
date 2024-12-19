@@ -13,7 +13,7 @@ class Plataforma {
         $credentials = Config::getDbCredentials();
 
         // Create an instance of the Database class and connect to DB
-        $dbInstance = new Database($credentials['host'], $credentials['user'], $credentials['password'], $credentials['db_name']);
+        $dbInstance = new Database($credentials['host'], $credentials['user'], $credentials['password'], $credentials['dbname']);
         $connection = $dbInstance->connect();
 
         // If connection fails (returns an error message), exit
