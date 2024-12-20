@@ -1,5 +1,6 @@
 <?php
   require_once("../Controllers/ActoresController.php");
+  require_once("../constants/style.php");
 
   $actors = new ActoresController();
 ?>
@@ -16,7 +17,9 @@
   <div class="container">
     <h1 class="h1">Funciona</h1>
     <?php foreach ($actors->getAll() as $actor): ?>
-      <li><?= $actor['firstname']; ?></li>
+      <li class=<?=PRYMARY_COLOR?>>
+        <?= $actor['firstname']; ?>
+      </li>
     <?php endforeach; ?>
   </div>
 </body>
