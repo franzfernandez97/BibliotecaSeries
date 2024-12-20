@@ -30,7 +30,7 @@ class PlataformaController {
     // Handle the READ action (Get a platform by ID)
     public function getById($id) {
         // Call the getById method from the Plataforma model
-        return $this->plataforma->getById($id);
+        return $this->plataforma->getById(strval($id));
     }
 
     // Handle the UPDATE action (Update a platform by ID)
@@ -51,3 +51,4 @@ class PlataformaController {
     }
 }
 ?>
+

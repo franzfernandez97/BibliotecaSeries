@@ -5,7 +5,7 @@ require_once '../Config/Config.php';
 
 class Plataforma {
     private $db;
-    private $table = 'Plataformas';
+    private $table = 'platforms';
 
     public function __construct() {
 
@@ -33,7 +33,7 @@ class Plataforma {
         if ($stmt = $this->db->prepare($query)) {
             $stmt->bind_param("s", $name);
             if ($stmt->execute()) {
-                echo "New platform added successfully.\n";
+                echo "New platform {".$name."}added successfully.\n";
             } else {
                 echo "Error: " . $stmt->error . "\n";
             }
