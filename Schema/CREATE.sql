@@ -15,7 +15,9 @@ CREATE TABLE IF NOT EXISTS series (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	title VARCHAR(255) NOT NULL,
 	platformid INT,
-	FOREIGN KEY (platformid) REFERENCES platforms(id) ON DELETE CASCADE ON UPDATE SET DEFAULT
+	FOREIGN KEY (platformid) REFERENCES platforms(id) 
+		ON DELETE CASCADE 
+    ON UPDATE CASCADE
 );
 
 -- Crear Actores
@@ -41,7 +43,9 @@ CREATE TABLE IF NOT EXISTS series_directors (
   iddirector INT,
   idserie INT,
   PRIMARY KEY (iddirector, idserie),
-  FOREIGN KEY (iddirector) REFERENCES directors(id) ON DELETE SET DEFAULT ON UPDATE CASCADE,
+  FOREIGN KEY (iddirector) REFERENCES directors(id) 
+	  ON DELETE CASCADE
+    ON UPDATE CASCADE,
   FOREIGN KEY (idserie) REFERENCES series(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -50,8 +54,12 @@ CREATE TABLE IF NOT EXISTS series_actors (
   idactor INT,
   idserie INT,
   PRIMARY KEY (idactor, idserie),
-  FOREIGN KEY (idactor) REFERENCES actors(id) ON DELETE SET DEFAULT ON UPDATE CASCADE,
-  FOREIGN KEY (idserie) REFERENCES series(id) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (idactor) REFERENCES actors(id) 
+	  ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+  FOREIGN KEY (idserie) REFERENCES series(id) 
+	  ON DELETE CASCADE 
+    ON UPDATE CASCADE
 );
 
 -- Crea Idiomas
@@ -67,6 +75,10 @@ CREATE TABLE IF NOT EXISTS languages_series (
 	idserie INT,
   languagestype ENUM('audio', 'subtitle'),
 	PRIMARY KEY (idlanguage, idserie, languagestype),
-	FOREIGN KEY (idlanguage) REFERENCES languages(id) ON DELETE CASCADE ON UPDATE CASCADE,
-	FOREIGN KEY (idserie) REFERENCES series(id) ON DELETE CASCADE ON UPDATE CASCADE
+	FOREIGN KEY (idlanguage) REFERENCES languages(id) 
+		ON DELETE CASCADE 
+    ON UPDATE CASCADE,
+	FOREIGN KEY (idserie) REFERENCES series(id) 
+		ON DELETE CASCADE 
+    ON UPDATE CASCADE
 );
