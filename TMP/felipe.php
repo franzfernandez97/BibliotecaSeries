@@ -72,6 +72,11 @@ function inputActorData($data):void {
     echo "". $e->getMessage() ."";
   }
 }
+
+function deleteTables(): void {
+
+}
+
 $datos = [
   ["Juan", "Pérez", "1990-05-15", "Mexico"],
   ["María", "García", "1985-03-20", "Colombia"],
