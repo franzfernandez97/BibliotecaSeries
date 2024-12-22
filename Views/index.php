@@ -73,15 +73,15 @@ $platforms = $controller->getAll();
                 <tbody>
                     <?php foreach ($platforms as $platform): ?>
                         <tr>
-                            <td><?php echo $platform['ID']; ?></td>
-                            <td><?php echo $platform['Nombre']; ?></td>
+                            <td><?php echo $platform['id']; ?></td>
+                            <td><?php echo $platform['name']; ?></td>
                             <td>
                                 <!-- Edit Button (Update) -->
                                 <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal" 
-                                        data-ID="<?php echo $platform['ID']; ?>" data-Nombre="<?php echo $platform['Nombre']; ?>">Edit</button>
+                                        data-ID="<?php echo $platform['id']; ?>" data-Nombre="<?php echo $platform['name']; ?>">Edit</button>
                                 
                                 <!-- Delete Button -->
-                                <a href="?delete_ID=<?php echo $platform['ID']; ?>" class="btn btn-danger btn-sm">Delete</a>
+                                <a href="?delete_ID=<?php echo $platform['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
