@@ -1,9 +1,9 @@
 <?php
-  require_once '../Models/ActoresModel.php';
-  class ActoresController {
+  require_once '../models/actorsModel.php';
+  class ActorsController {
     private $actorModel;
     public function __construct() {
-      $this->actorModel = new Actores();
+      $this->actorModel = new Actors();
     }
     public function getAll():array {
       return $this->actorModel->getAll();
