@@ -1,9 +1,9 @@
 <?php
   require_once 'Database.php';
-  require_once '../Config/Config.php';
+  require_once '../config/Config.php';
 
 
-  class Actores {
+  class Actors {
     private $db;
     private $table = 'actors';
 

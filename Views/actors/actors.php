@@ -1,8 +1,8 @@
 <?php
-  require_once("../Controllers/ActoresController.php");
+  require_once("../controllers/actorsController.php");
   require_once("../constants/style.php");
 
-  $actors = new ActoresController();
+  $actors = new ActorsController();
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form data
@@ -52,7 +52,7 @@
   </div>
   <button type="submit" class="btn btn-primary">Crear</button>
 </form>
-<button onClick=<?php $actors->deleteActor(5);?>>ELIMINAR REGISTRO</button>
+<button onClick=<?php $actors->deleteActor(5);?> >ELIMINAR REGISTRO</button>
   </div>
 </body>
 </html>
