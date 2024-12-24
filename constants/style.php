@@ -1,7 +1,4 @@
 <?php
-define("TABLE_STYLE", "table" );
-define("PRYMARY_COLOR", "h2" );
-
 // Definición de constantes para personalizar la aplicación
 
 // Colores principales
@@ -43,6 +40,7 @@ define('BOTON_COLOR_EXITO', '#fff'); // Color blanco para el texto del botón de
 define('SOMBRA_CUADRO', '0 0.125rem 0.25rem rgba(0, 0, 0, 0.075)');
 
 // Estilo de tablas
+define('TABLE', 'table table-striped');
 define('TABLA_BORDE', '1px solid #ced4da'); // Borde de la tabla
 define('TABLA_COLOR_FONDO', '#ffffff'); // Fondo blanco para las filas
 define('TABLA_COLOR_FILA_ALTERNADA', '#f8f9fa'); // Fondo alternativo para las filas

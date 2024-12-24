@@ -1,5 +1,5 @@
 <?php
-  require_once '../models/actorsModel.php';
+  require_once "../models/actorsModel.php";
   class ActorsController {
     private $actorModel;
     public function __construct() {

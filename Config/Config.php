@@ -3,7 +3,7 @@
 
 class Config {
     // This method loads the credentials from the JSON file
-    public static function getDbCredentials($jsonFilePath = '../Config/credentials.json') {
+    public static function getDbCredentials($jsonFilePath = '../config/credentials.json') {
         // Check if the file exists
         if (file_exists($jsonFilePath)) {
             // Read the file contents
