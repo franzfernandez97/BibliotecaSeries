@@ -1,7 +1,8 @@
 <?php
-require_once 'database.php';
 
-require_once '../Config/Config.php';
+require_once 'database.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/config/config.php';
+
 
 class Plataforma {
     private $db;

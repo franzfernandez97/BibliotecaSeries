@@ -1,5 +1,5 @@
 <?php
-require_once '../Controllers/PlataformaController.php';
+require_once '../controllers/platformsController.php';
 require_once '../constants/style.php';
 
 //crea ojeto plataforma

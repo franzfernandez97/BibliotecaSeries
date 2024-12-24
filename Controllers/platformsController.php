@@ -1,5 +1,5 @@
 <?php
-require_once '../Models/PlataformasModel.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/models/platformsModel.php';
 
 class PlataformaController {
 
