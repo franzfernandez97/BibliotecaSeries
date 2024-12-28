@@ -60,13 +60,13 @@ require_once "../../controllers/platformsController.php";
         <a href=""></a>
     </div>
     
-    <?php // if the user insert values 
+    <?php // if the user inserted values 
     } else {
         
         if ($platformEdited) {
     ?>  
             <div class='alert alert-success' role='alert'>
-            ¡Plataforma '<?php $idPlatform ?>' editada con éxito! <a href='list.php'>Volver al listado de plataformas.</a>
+            ¡Plataforma '<?php $idPlatform ?>' editada con éxito!  <a href='list.php'>Volver al listado de plataformas.</a>
             </div>;
 
     <?php            
@@ -74,7 +74,7 @@ require_once "../../controllers/platformsController.php";
                 // Warning Message
     ?>                        
                 <div class='alert alert-danger' role='alert'>
-                    ¡Plataforma no se ha editado!<a href='edit.php?id=<?php echo $idPlatform?>'>Refrescar.</a>
+                    ¡Plataforma no se ha editado!  <a href='edit.php?id=<?php echo $idPlatform?>'>Refrescar.</a>
                 </div>
     <?php
             }
