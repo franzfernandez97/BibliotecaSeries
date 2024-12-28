@@ -76,69 +76,73 @@ class Platform {
         return $platformCreated;
     }
 
-//     // CREATE: Add a new platform (only name)
-//     public function create($name) {
-//         $query = "INSERT INTO $this->table (name) VALUES (?)";
+    public function update() {
+        $platformUpdated = false;
+        $mysqli = Database::getDbConnection();
+    
+        // Prepare the update statement to prevent SQL injection
+        $stmt = $mysqli->prepare("UPDATE $this->table SET name=? WHERE id = ?");
+        $stmt->bind_param("si", $this->name, $this->id);  // 's' for string (name), 'i' for integer (id)
+        
+        // Execute the statement
+        if ($stmt->execute()) {
+            // Check if any row was affected (i.e., if the update was successful)
+            if ($stmt->affected_rows > 0) {
+                $platformUpdated = true;
+            } else {
+                // No rows were updated (perhaps the id doesn't exist or name is unchanged)
+                $platformUpdated = false;
+            }
+        }
+        $stmt->close();
+        $mysqli->close();
+        
+        return $platformUpdated;
+    }
 
-//         if ($stmt = $this->db->prepare($query)) {
-//             $stmt->bind_param("s", $name);
-//             if ($stmt->execute()) {
-//                 echo "New platform {".$name."}added successfully.\n";
-//             } else {
-//                 echo "Error: " . $stmt->error . "\n";
-//             }
-//             $stmt->close();
-//         }
-//     }
+    public function getItem(){
+        $mysqli = Database::getDbConnection();
+        // Use prepared statement to prevent SQL injection
+        $stmt = $mysqli->prepare("SELECT * FROM $this->table WHERE id = ?");
+        $stmt->bind_param("i", $this->id);  // 's' denotes that we're passing a string
 
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-//     // READ: Get a specific platform by ID
-//     public function getById($id) {
-//         $query = "SELECT * FROM $this->table WHERE id = ?";
-//         if ($stmt = $this->db->prepare($query)) {
-//             $stmt->bind_param("i", $id);
-//             $stmt->execute();
-//             $result = $stmt->get_result();
+        //if exist a result
+        if ($result->num_rows > 0){
+            foreach ($result as $item){
+                $itemObject = new Platform($item["id"], $item["name"]);
+                return $itemObject;
+            }
+        }
+        return false;
+    }
 
-//             if ($result->num_rows > 0) {
-//                 return $result->fetch_assoc();
-//             } else {
-//                 echo "Platform not found.\n";
-//                 return null;
-//             }
+    public function delete(){
+        $deleted = false;
+        $mysqli = Database::getDbConnection();
 
-//             $stmt->close();
-//         }
-//     }
+        //prepate statement to Prevent sql injection
+        $stmt = $mysqli->prepare("DELETE FROM $this->table WHERE id = ?");
+        $stmt->bind_param("i", $this->id);
 
-//     // UPDATE: Update an existing platform by ID
-//     public function update($id, $name) {
-//         $query = "UPDATE $this->table SET name = ? WHERE id = ?";
+        //execute the statement
+        if ($stmt->execute()){
+            //check rows
+            if($stmt->affected_rows > 0){
+                $deleted = true; //record succesfully deleted
+            }else {
+                // No rows were updated (perhaps the id doesn't exist or name is unchanged)
+                $deleted = false;
+            }
+        }
+        // Close the statement and connection
+        $stmt->close();
+        $mysqli->close();
 
-//         if ($stmt = $this->db->prepare($query)) {
-//             $stmt->bind_param("si", $name, $id);
-//             if ($stmt->execute()) {
-//                 echo "Platform updated successfully.\n";
-//             } else {
-//                 echo "Error: " . $stmt->error . "\n";
-//             }
-//             $stmt->close();
-//         }
-//     }
+        return $deleted;
+    }
 
-//     // DELETE: Delete a platform by ID
-//     public function delete($id) {
-//         $query = "DELETE FROM $this->table WHERE id = ?";
-
-//         if ($stmt = $this->db->prepare($query)) {
-//             $stmt->bind_param("i", $id);
-//             if ($stmt->execute()) {
-//                 echo "Platform deleted successfully.\n";
-//             } else {
-//                 echo "Error: " . $stmt->error . "\n";
-//             }
-//             $stmt->close();
-//         }
-//     }
 }
 ?>

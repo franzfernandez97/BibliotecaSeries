@@ -6,9 +6,14 @@
     <title>Navigation Page</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
 </head>
 <body>
-    <div class="container text-center mt-5">
+    <!-- Nav Bar-->  
+    <?php include 'includes\navbar.php';?> 
+
+    <!-- Main Info-->  
+    <div class="container text-center mt-5 content">
         <h1 class="display-3">Biblioteca de Series</h1>
         <div class="row mt-4">
             <!-- Button 1 -->
@@ -36,14 +41,11 @@
                 <a href="views\lenguages\list.php" class="btn btn-primary btn-lg w-100">Idiomas</a>
                 <p class="mt-2">Listado y gestión de idiomas</p>
             </div>
-            <!-- Button 6 -->
-            <div class="col-md-6">
-                <a href="views\customRequests\list.php" class="btn btn-primary btn-lg w-100">Consultas Personalizadas</a>
-                <p class="mt-2">Consulta la información relacionada de una serie</p>
-            </div>
         </div>
     </div>
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Footer-->  
+    <?php include 'includes\footer.php';?> 
+
 </body>
 </html>

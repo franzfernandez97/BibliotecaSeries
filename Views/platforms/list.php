@@ -12,9 +12,13 @@ require_once "../../controllers/platformsController.php";
     <title>Navigation Page</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
 </head>
 <body>
-    <div class="container text-center mt-5">
+    <!-- Nav Bar-->  
+    <?php include '..\..\includes\navbar.php';?> 
+
+    <div class="container text-center mt-5 content">
         <h1 class="display-3">Lista de Plataformas</h1>
     
         <!-- Link to create View -->
@@ -48,7 +52,7 @@ require_once "../../controllers/platformsController.php";
                                     <div class="btn-group" role="group" aria-label="Acciones">
                                         <a class= "btn btn-success" href="edit.php?id=<?php echo $platform->getId(); ?>">Editar</a>
                                         <form name="delete_platform" action="delete.php" method="POST" style="display:inline;">
-                                            <input type="hidden" name="platformID" value="<?php echo $platform->getId()?>">
+                                            <input type="hidden" name="platformId" value="<?php echo $platform->getId()?>">
                                             <button type="submit" class="btn btn-danger">Borrar</button>
                                         </form>
                                     </div>
@@ -65,4 +69,15 @@ require_once "../../controllers/platformsController.php";
                 <?php } ?>
             </div>
     </div>
+
+    <!-- Footer-->  
+    <?php include '..\..\includes\footer.php';?> 
+
+    <!-- Import the confirmDelete.js file -->
+    <script src="..\..\includes\confirmDelete.js"></script>
+    <script>
+        // Attach the confirmDelete function to the form's submit event
+        document.forms["delete_platform"].addEventListener("submit", confirmDelete);
+    </script>
+
 </body>

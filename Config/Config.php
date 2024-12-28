@@ -4,13 +4,13 @@ class Config {
 
     private static function getJsonPath() {
         // Call the getAll method from the Plataforma model
-        return  $_SERVER['DOCUMENT_ROOT'] . '/config/credentials.json';
+        return  $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/config/credentials.json';
     }
     // This method loads the credentials from the JSON file
 
     public static function getDbCredentials() {
         $jsonFilePath = self::getJsonPath();
-
+        
         // Check if the file exists
         if (file_exists($jsonFilePath)) {
             // Read the file contents
