@@ -162,7 +162,7 @@ $plataformas = new PlataformaController();
 
 <h2>CELIMINAR Plataforma</h2>
     <?php
-    $plataformas->delete(1);
+    $plataformas->delete(29);
 
     ?>
      <!-- Tabla -->
