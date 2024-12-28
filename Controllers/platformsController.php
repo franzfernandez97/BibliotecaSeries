@@ -8,12 +8,30 @@ function listPlatforms(){
 }
 
 function createPlatform ($namePlatform){
-    $model = new Platform(null, $namePlatform);
-    $isCreated = $model->create();
+    $newPlatform = new Platform(null, $namePlatform);
+    $isCreated = $newPlatform->create();
     return $isCreated ;
- 
-
 }
+
+function updatePlatform ($idPlatform, $namePlatform){
+    echo $idPlatform;
+    echo $namePlatform;
+    $model = new Platform($idPlatform, $namePlatform);
+    $isEdited = $model->update();
+    return $isEdited ;
+}
+
+function getPlatformData($idPlatform){
+    $platform = new Platform($idPlatform,null);
+    $platformObject = $platform->getItem();
+    return $platformObject; 
+}
+
+// function deletePlatform ($idPlatform){
+//     $platform = new Platform($idPlatform);
+//     $platformDeleted = $platform->delete();
+//     return platformDeleted;
+// }
 //class PlataformaController {
 
 //     private $plataforma;

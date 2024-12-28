@@ -76,6 +76,51 @@ class Platform {
         return $platformCreated;
     }
 
+    public function update() {
+        $platformUpdated = false;
+        $mysqli = Database::getDbConnection();
+    
+        // Prepare the update statement to prevent SQL injection
+        $stmt = $mysqli->prepare("UPDATE $this->table SET name=? WHERE id = ?");
+        $stmt->bind_param("si", $this->name, $this->id);  // 's' for string (name), 'i' for integer (id)
+        
+        // Execute the statement
+        if ($stmt->execute()) {
+            // Check if any row was affected (i.e., if the update was successful)
+            if ($stmt->affected_rows > 0) {
+                $platformUpdated = true;
+            } else {
+                // No rows were updated (perhaps the id doesn't exist or name is unchanged)
+                $platformUpdated = false;
+            }
+        }
+    
+        // Close the statement and connection
+        $stmt->close();
+        $mysqli->close();
+        
+        return $platformUpdated;
+    }
+
+    public function getItem(){
+        $mysqli = Database::getDbConnection();
+        // Use prepared statement to prevent SQL injection
+        $stmt = $mysqli->prepare("SELECT * FROM $this->table WHERE id = ?");
+        $stmt->bind_param("i", $this->id);  // 's' denotes that we're passing a string
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        //if exist a result
+        if ($result->num_rows > 0){
+            foreach ($result as $item){
+                $itemObject = new Platform($item["id"], $item["name"]);
+                return $itemObject;
+            }
+        }
+        return false;
+    }
+
 //     // CREATE: Add a new platform (only name)
 //     public function create($name) {
 //         $query = "INSERT INTO $this->table (name) VALUES (?)";

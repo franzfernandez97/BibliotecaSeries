@@ -13,7 +13,7 @@
     <?php include 'includes\navbar.php';?> 
 
     <!-- Main Info-->  
-    <div class="container text-center mt-5">
+    <div class="container text-center mt-5 content">
         <h1 class="display-3">Biblioteca de Series</h1>
         <div class="row mt-4">
             <!-- Button 1 -->

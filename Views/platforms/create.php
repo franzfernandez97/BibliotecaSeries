@@ -14,51 +14,56 @@ require_once "../../controllers/platformsController.php";
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
-<div class="container text-center mt-5">
-    <h1 class="display-3">
-        <!-- Home Icon using Bootstrap Icons -->
-        <i class="bi bi-house-door" href></i> Crear Plataforma
-    </h1>
+<body>
+    <!-- Nav Bar-->  
+    <?php include '..\..\includes\navbar.php';?> 
+    
+    <!-- Main Info-->  
+    <div class="container text-center mt-5 content">
+        <h1 class="display-3">Crear Plataforma </h1>
 
-    <!-- Link to create View -->
-    <div class="row justify-content-center">
-        <div class="col-md-6"> <!-- Adjust column width for better alignment -->
-            <form  action="create.php" style="display:inline;" method="POST">
-                <div class="mb-3">
-                    <label for="platformName" class="form-label"></label>
-                    <input id="platformName" name="platformName" type="text" class="form-control" placeholder="Introduce una plataforma" required>
-                </div>
+        <!-- Link to create View -->
+        <div class="row justify-content-center">
+            <div class="col-md-6"> <!-- Adjust column width for better alignment -->
+                <form  action="create.php" style="display:inline;" method="POST">
+                    <div class="mb-3">
+                        <label for="platformName" class="form-label"></label>
+                        <input id="platformName" name="platformName" type="text" class="form-control" placeholder="Introduce una plataforma" value="" required>
+                    </div>
 
-                <!-- Submit button inside the form -->
-                <button type="submit" class="btn btn-primary px-5 w-100">Crear</button>
-            </form>
+                    <!-- Submit button inside the form -->
+                    <button type="submit" class="btn btn-primary px-5 w-100">Crear</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
-<?php
+    <?php
 
-    if (isset($_POST['platformName'])) {
 
-        $platformName = $_POST['platformName'];
+        if (isset($_POST['platformName'])) {
 
-        // is a valid name?
-        if (!empty($platformName)) {
+            $platformName = $_POST['platformName'];
 
-            //Create the platform
-            $platformCreated = createPlatform($platformName);
+            // is a valid name?
+            if (!empty($platformName)) {
 
-            // Show Success Message
-            if ($platformCreated){
-                echo "<div class='alert alert-success'>¡Plataforma '$platformName' creada con éxito!</div>";
+                //Create the platform
+                $platformCreated = createPlatform($platformName);
+
+                // Show Success Message
+                if ($platformCreated){
+                    echo "<div class='alert alert-success'>¡Plataforma '$platformName' creada con éxito!</div>";
+                } else {
+                    echo "<div class='alert alert-danger'>Plataforma '$platformName' ya esxiste en la DB. Por favor ingrese otro nombre</div>";
+                }
+                
             } else {
-                echo "<div class='alert alert-danger'>Plataforma '$platformName' ya esxiste en la DB. Por favor ingrese otro nombre</div>";
+                // Warning Message
+                echo "<div class='alert alert-danger'>Por favor ingrese un nombre válido</div>";
             }
-            
-        } else {
-            // Warning Message
-            echo "<div class='alert alert-danger'>Por favor ingrese un nombre válido</div>";
         }
-    }
-?>
+    ?>
+     <!-- Footer-->  
+     <?php include '..\..\includes\footer.php';?> 
 </body>
