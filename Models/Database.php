@@ -1,4 +1,6 @@
 <?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/config/config.php';
+
 class Database{
     private $host;
     private $user;
@@ -13,29 +15,50 @@ class Database{
         $this->dbname = $dbname;
     }
 
-    // metodo para conectar a la DB
+    // connect to DB
     public function connect() {
 
         $this->connection = new mysqli($this->host, $this->user, $this->password, $this->dbname);
-
         
         if ($this->connection->connect_error) {
             return "Error: " . $this->connection->connect_error; // Return error message
         }
-        // si conexion es exitosa
+
         return $this->connection; // Connection successful
     }
 
-    // Metodo para obtener conexion
+    // getConnection
     public function getConnection() {
         return $this->connection;
     }
 
-    // Metodo para cerra conexion
+    // closeConnection
     public function closeConnection() {
         if ($this->connection) {
             $this->connection->close();
         }
     }
 
+    
+    public static function getDbConnection() {
+        // Load the database credentials using the simplified Config class
+        $credentials = Config::getDbCredentials();
+
+        // Create an instance of the Database class
+        $dbInstance = new self($credentials['host'], $credentials['user'], $credentials['password'], $credentials['dbname']);
+
+        // Connect to the database
+        $connection = $dbInstance->connect();
+
+        // If connection fails, return the error message
+        if (is_string($connection)) {
+            echo $connection;
+            exit; // Stop execution
+        }
+
+        // Return the successful connection
+        return $connection;
+    }
+
 }
+?>
