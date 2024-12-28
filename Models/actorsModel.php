@@ -1,64 +1,87 @@
 <?php
   require_once 'database.php';
-  require_once $_SERVER['DOCUMENT_ROOT'] . '/config/config.php';
 
 
   class Actors {
-    private $db;
+
     private $table = 'actors';
+    private $actorId;
+    private $firstName;
+    private $lastName;
+    private $birthName;
+    private $nationality;
 
-    public function __construct() {
-      // Load the database credentials using the simplified Config class
-      $credentials = Config::getDbCredentials();
-
-      // Create an instance of the Database class and connect to DB
-      $dbInstance = new Database($credentials['host'], $credentials['user'], $credentials['password'], $credentials['dbname']);
-      $connection = $dbInstance->connect();
-
-      // If connection fails (returns an error message), exit
-      if (is_string($connection)) {
-          echo $connection;
-          exit;
-      }
-
-      // Otherwise, set the connection
-      $this->db = $connection;
+    public function __construct($actorId, $firstName, $lastName, $birthName, $nationality) {
+      $this->actorId = $actorId;
+      $this->firstName = $firstName;
+      $this->lastName = $lastName;
+      $this->birthName = $birthName;
+      $this->nationality = $nationality;
     }
-    public function getAll() {
+    //GETTERS
+    public function getActorId():int {
+      return $this->actorId;
+    }
+    public function getFirstName():string {
+      return $this->firstName;
+    }
+    public function getLastName():string {
+      return $this->lastName;
+    }
+    public function getBirthName():string {
+      return $this->birthName;
+    }
+    public function getNationality():string {
+      return $this->nationality;
+    }
+    //SETTERS
+    public function setActorId(int $actorId): void {
+      $this->actorId = $actorId;
+    }
+    public function setFirstName(string $firstName): void {
+      $this->firstName = $firstName;
+    }
+    public function setLastName(string $lastName): void {
+      $this->lastName = $lastName;
+    }
+    public function setBirthName(string $birthName): void {
+      $this->birthName = $birthName;
+    }
+    public function setNationality(string $nationality): void {
+      $this->nationality = $nationality;
+    }
+    public function getAll():Array {
+      $mysqli = Database::getDbConnection();
       $query = "SELECT * FROM $this->table";
-      $result = $this->db->query($query);
+      $result = $mysqli->query($query);
+      $listData = [];
+
       if ($result->num_rows > 0) {
-        $actors = [];
-        while ($row = $result->fetch_assoc()) {
-          $actors[] = $row;
-        }
-        return $actors;
-      } else {
-          return [];
+          foreach ($result as $item){
+            $itemObject = new Actors($item['id'], $item['firstname'], $item['lastname'], $item['birthname'], $item['nationality']);
+            array_push($listData, $itemObject);
+          }
       }
+      $mysqli->close();
+      return $listData;
     }
 
-    public function getById(int $id):array | string | null {
-      $query = "SELECT * FROM $this->table WHERE id = ?";
-      try {
-        if ($stmt = $this->db->prepare($query)) {
-          $stmt->bind_param("i", $id);
-          $stmt->execute();
-          $result = $stmt->get_result();
-          if ($result->num_rows > 0) {
-            $actor = [];
-            while ($row = $result->fetch_assoc()) {
-              $actor[] = $row;
-            }
-            $stmt->close();
-            return $actor;
-          } else {
-              return [];
-          }
+    public function getById(int $id):array{
+      $mysqli = Database::getDbConnection();
+      $query = 'SELECT * FROM platforms WHERE id = ?';
+      $stmt = $mysqli->prepare($query);
+      $stmt->bind_param('i', $id);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $actor = [];
+      if ($result->num_rows > 0) {
+        foreach ($result as $item){
+          $itemObject = new Actors($item['id'], $item['firstname'], $item['lastname'], $item['birthname'], $item['nationality']);
+          array_push($actor, $itemObject);
         }
-      }catch (mysqli_sql_exception $e) {
-        return $e->getMessage();
       }
+      $mysqli->close();
+      return $actor;
     }
 
     public function createActor(array $data):int | string {
