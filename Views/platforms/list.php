@@ -73,7 +73,7 @@ require_once "../../controllers/platformsController.php";
     <!-- Footer-->  
     <?php include '..\..\includes\footer.php';?> 
 
-    <!-- Import the delete.js file -->
+    <!-- Import the confirmDelete.js file -->
     <script src="..\..\includes\confirmDelete.js"></script>
     <script>
         // Attach the confirmDelete function to the form's submit event
