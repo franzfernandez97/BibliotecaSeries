@@ -66,7 +66,7 @@ require_once "../../controllers/platformsController.php";
         if ($platformEdited) {
     ?>  
             <div class='alert alert-success' role='alert'>
-            ¡Plataforma '<?php $idPlatform ?>' editada con éxito!  <a href='list.php'>Volver al listado de plataformas.</a>
+            ¡Plataforma editada con éxito!  <a href='list.php'>Volver al listado de plataformas.</a>
             </div>;
 
     <?php            

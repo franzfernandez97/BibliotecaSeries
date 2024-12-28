@@ -9,7 +9,7 @@ require_once "../../controllers/platformsController.php";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create a Platform</title>
+    <title>Delete a Platform</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
@@ -31,7 +31,7 @@ require_once "../../controllers/platformsController.php";
     if($platformDeleted){
     ?>
         <div class='alert alert-success' role='alert'>
-            ¡Plataforma '<?php $_POST['platformId']?>' borrada correctamente! <a href='list.php'>Volver al listado de plataformas.</a>
+            ¡Plataforma borrada correctamente! <a href='list.php'>Volver al listado de plataformas.</a>
         </div>;
     <?php            
     } else {
