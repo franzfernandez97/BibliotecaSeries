@@ -12,9 +12,13 @@ require_once "../../controllers/platformsController.php";
     <title>Navigation Page</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
 </head>
 <body>
-    <div class="container text-center mt-5">
+    <!-- Nav Bar-->  
+    <?php include '..\..\includes\navbar.php';?> 
+
+    <div class="container text-center mt-5 content">
         <h1 class="display-3">Lista de Plataformas</h1>
     
         <!-- Link to create View -->
@@ -65,4 +69,8 @@ require_once "../../controllers/platformsController.php";
                 <?php } ?>
             </div>
     </div>
+
+    <!-- Footer-->  
+    <?php include '..\..\includes\footer.php';?> 
+
 </body>
