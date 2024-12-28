@@ -1,24 +1,15 @@
 <?php
-  require_once "../../controllers/actorsController.php";
-  require_once "../../constants/style.php";
+  require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/actorsController.php';
+  require_once $_SERVER['DOCUMENT_ROOT'] . '/constants/style.php';
 
   $actors = new ActorsController();
   $actorsArray = $actors->getAll();
-  if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve form data
-    $name = $_POST["firstname"];
-    $lastName = $_POST["lastname"];
-    $birthDate = $_POST["birthdate"];
-    $nationality = $_POST["nationality"];
-    $data = [$name, $lastName, $birthDate, $nationality];
-    $result = $actors->updateActor(5, $data);
-    echo $result;
-  }
+
 
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,7 +17,8 @@
   <title>Peliculas</title>
 </head>
 <body>
-  <div class=<?php $TABLE; ?> >
+  <div class="container" >
+  <h1 class="h1">Lista de actores</h1>
   <table class="table">
     <thead>
       <tr>
@@ -45,21 +37,41 @@
         <th>
           NACIONALIDAD
         </th>
+        <th>
+          Editar
+        </th>
+        <th>
+          Borrar
+        </th>
       </tr>
     </thead>
     <tbody>
-      <?php foreach ($actorsArray as $actor): ?>
+      <?php  if (count($actorsArray) > 0): ?>
+        <?php foreach ($actorsArray as $actor): ?>
+          <tr>
+            <td><?= htmlspecialchars($actor["id"]) ?></td>
+            <td><?= htmlspecialchars($actor["firstname"]) ?></td>
+            <td><?= htmlspecialchars($actor["lastname"]) ?></td>
+            <td><?= htmlspecialchars($actor["birthdate"]) ?></td>
+            <td><?= htmlspecialchars($actor["nationality"]) ?></td>
+            <td>
+              <a class="btn btn-success" href="editActor.php?id=<?= htmlspecialchars($actor["id"]) ?>">Editar</a>
+            </td>
+            <td>
+              <form name="deleteActor" action="deleteActor.php" method="POST">
+                <input type="hidden" name="actorId" value="<?= htmlspecialchars($actor["id"]) ?>">
+                <button type="submit" class="btn btn-danger">Borrar</button>
+              </form>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+      <?php else: ?>
         <tr>
-          <td><?= htmlspecialchars($actor["id"]) ?></td>
-          <td><?= htmlspecialchars($actor["firstname"]) ?></td>
-          <td><?= htmlspecialchars($actor["lastname"]) ?></td>
-          <td><?= htmlspecialchars($actor["birthdate"]) ?></td>
-          <td><?= htmlspecialchars($actor["nationality"]) ?></td>
+          <td colspan="6">No hay actores</td>
         </tr>
-      <?php endforeach; ?>
+      <?php endif; ?>
     </tbody>
   </table>
-<button onClick=<?php $actors->deleteActor(5);?> >ELIMINAR REGISTRO</button>
   </div>
 </body>
 </html>
