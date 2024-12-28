@@ -52,7 +52,7 @@ require_once "../../controllers/platformsController.php";
                                     <div class="btn-group" role="group" aria-label="Acciones">
                                         <a class= "btn btn-success" href="edit.php?id=<?php echo $platform->getId(); ?>">Editar</a>
                                         <form name="delete_platform" action="delete.php" method="POST" style="display:inline;">
-                                            <input type="hidden" name="platformID" value="<?php echo $platform->getId()?>">
+                                            <input type="hidden" name="platformId" value="<?php echo $platform->getId()?>">
                                             <button type="submit" class="btn btn-danger">Borrar</button>
                                         </form>
                                     </div>
@@ -72,5 +72,12 @@ require_once "../../controllers/platformsController.php";
 
     <!-- Footer-->  
     <?php include '..\..\includes\footer.php';?> 
+
+    <!-- Import the delete.js file -->
+    <script src="..\..\includes\confirmDelete.js"></script>
+    <script>
+        // Attach the confirmDelete function to the form's submit event
+        document.forms["delete_platform"].addEventListener("submit", confirmDelete);
+    </script>
 
 </body>

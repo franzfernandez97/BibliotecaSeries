@@ -14,8 +14,6 @@ function createPlatform ($namePlatform){
 }
 
 function updatePlatform ($idPlatform, $namePlatform){
-    echo $idPlatform;
-    echo $namePlatform;
     $model = new Platform($idPlatform, $namePlatform);
     $isEdited = $model->update();
     return $isEdited ;
@@ -27,11 +25,11 @@ function getPlatformData($idPlatform){
     return $platformObject; 
 }
 
-// function deletePlatform ($idPlatform){
-//     $platform = new Platform($idPlatform);
-//     $platformDeleted = $platform->delete();
-//     return platformDeleted;
-// }
+function deletePlatform ($idPlatform){
+    $platform = new Platform($idPlatform,null);
+    $platformDeleted = $platform->delete();
+    return $platformDeleted;
+}
 
 ?>
 

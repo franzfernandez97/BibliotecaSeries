@@ -119,5 +119,30 @@ class Platform {
         return false;
     }
 
+    public function delete(){
+        $deleted = false;
+        $mysqli = Database::getDbConnection();
+
+        //prepate statement to Prevent sql injection
+        $stmt = $mysqli->prepare("DELETE FROM $this->table WHERE id = ?");
+        $stmt->bind_param("i", $this->id);
+
+        //execute the statement
+        if ($stmt->execute()){
+            //check rows
+            if($stmt->affected_rows > 0){
+                $deleted = true; //record succesfully deleted
+            }else {
+                // No rows were updated (perhaps the id doesn't exist or name is unchanged)
+                $deleted = false;
+            }
+        }
+        // Close the statement and connection
+        $stmt->close();
+        $mysqli->close();
+
+        return $deleted;
+    }
+
 }
 ?>

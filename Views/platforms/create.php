@@ -73,8 +73,8 @@ require_once "../../controllers/platformsController.php";
             //if the createPlatform was succesfully executed
             if ($platformCreated){
     ?>
-    <div class='alert alert-success' role='alert'>
-            ¡Plataforma '<?php $_POST['platformName']?>' creada con éxito! <a href='list.php'>Volver al listado de plataformas.</a>
+            <div class='alert alert-success' role='alert'>
+                ¡Plataforma '<?php $_POST['platformName']?>' creada con éxito! <a href='list.php'>Volver al listado de plataformas.</a>
             </div>;
     <?php            
             } else {
