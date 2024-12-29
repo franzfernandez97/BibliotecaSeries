@@ -76,7 +76,10 @@
         <?php endif; ?>
       </tbody>
     </table>
+    <p>Hello Felipe, is me franz!</p>
   </div>
-  <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/footer.php';?>
+
+  <!-- Footer-->  
+  <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/footer.php';?> 
 </body>
 </html>
