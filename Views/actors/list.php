@@ -14,7 +14,11 @@
 </head>
 <body>
   <!-- Nav Bar-->
+<<<<<<< HEAD
   <?php include $_SERVER['DOCUMENT_ROOT'] .'/BibliotecaSeries/includes/navbar.php';?>
+=======
+  <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/navbar.php';?>
+>>>>>>> felipe
 
   <div class="container text-center mt-5 content" >
     <h1 class="display-3">Lista de actores</h1>
@@ -76,6 +80,10 @@
         <?php endif; ?>
       </tbody>
     </table>
+
   </div>
+
+  <!-- Footer-->
+  <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/footer.php';?>
 </body>
 </html>

@@ -32,6 +32,46 @@ function createSerie ($titleSerie,$idSerie){
     return $isCreated ;
 }
 
+function updateSerie ($idSerie, $titleSerie, $idPlatform){
+    //check if pass different arguments than 1
+    if (func_num_args() !== 2) {
+        throw new InvalidArgumentException("Error funcion updateSerie: requiere exactamente 2 parametros.");
+    }
+
+    // is $idSerie an INT?
+    if (!is_int($idSerie)) {
+        throw new InvalidArgumentException("Error funcion updateSerie: parametro 'idPlatform' debe ser un número entero (int).");
+    }
+
+    // is $idPlatform an INT?
+    if (!is_int($idPlatform)) {
+        throw new InvalidArgumentException("Error funcion updateSerie: parametro 'idPlatform' debe ser un número entero (int).");
+    }
+
+    // is $titleSerie a string?
+    if (!is_string($titleSerie)) {
+        throw new InvalidArgumentException("Error funcion updateSerie: parametro 'namePlatform' debe ser una cadena (string).");
+    }
+    $model = new Series($idSerie, $titleSerie, $idPlatform);
+    $isEdited = $model->update();
+    return $isEdited ;
+}
+
+function getSerieData($idSerie){
+    //check if pass different arguments than 1
+    if (func_num_args() !== 1) {
+        throw new InvalidArgumentException("Error funcion getPlatformData: requiere exactamente 1 parametro.");
+    }
+
+    // is $idSerie an INT?
+    if (!is_int($idSerie)) {
+        throw new InvalidArgumentException("Error funcion getPlatformData: parametro 'idPlatform' debe ser un número entero (int).");
+    }
+    $platform = new Series($idSerie,null, null);
+    $platformObject = $platform->getItem();
+    return $platformObject; 
+}
+
 function deleteSerie ($idSerie){
     //check if pass different arguments than 1
     if (func_num_args() !== 1) {

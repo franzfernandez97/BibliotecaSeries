@@ -6,13 +6,13 @@
     <title>Navigation Page</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
 </head>
 <body>
-    <!-- Nav Bar-->  
-    <?php include 'includes\navbar.php';?> 
+    <!-- Nav Bar-->
+    <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/navbar.php';?>
 
-    <!-- Main Info-->  
+    <!-- Main Info-->
     <div class="container text-center mt-5 content">
         <h1 class="display-3">Biblioteca de Series</h1>
         <div class="row mt-4">
@@ -44,8 +44,8 @@
         </div>
     </div>
 
-    <!-- Footer-->  
-    <?php include 'includes\footer.php';?> 
+    <!-- Footer-->
+    <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/footer.php';?>
 
 </body>
 </html>
