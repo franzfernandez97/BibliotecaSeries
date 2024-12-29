@@ -1,10 +1,12 @@
 <?php
   require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/actorsController.php';
+  require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/Controllers/seriesController.php';
 
+  $series = listSeries();
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +17,7 @@
 </head>
 <body>
       <!-- Nav Bar-->
-      <?php include '../../includes/navbar.php';?>
+      <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/navbar.php';?>
 
     <!-- Main Info-->
     <div class="container text-center mt-5 content">
@@ -68,10 +70,11 @@
                         <input id="nationality" name="nationality" type="text" class="form-control" placeholder="Introduce una plataforma" value="" required>
                     </div>
                     <div class="mb-3 d-flex flex-column align-items-start">
-                        <label for="series" class="form-label">Nacionalidad</label>
-                        <select name="series" id="series" class="form-control" value="">
+                        <label for="series" class="form-label">Series en que trabajó</label>
+                        <select name="series[]" id="series" class="form-control" multiple>
                           <?php foreach ($series as $serie): ?>
-                            <option value="<?= $serie->getSerieId() ?>"><?= $serie->getSerieName() ?></option>
+                            <option value="<?= $serie->getId() ?>"><?= $serie->getTitle() ?></option>
+                          <?php endforeach; ?>
                         </select>
                     </div>
 
@@ -107,5 +110,6 @@
     ?>
 
      <!-- Footer-->
-     <?php include '../../includes/footer.php';?>
+     <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/footer.php';?>
 </body>
+</html>

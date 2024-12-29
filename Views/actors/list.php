@@ -14,7 +14,7 @@
 </head>
 <body>
   <!-- Nav Bar-->
-  <?php include '../../includes/navbar.php';?>
+  <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/navbar.php';?>
 
   <div class="container text-center mt-5 content" >
     <h1 class="display-3">Lista de actores</h1>
@@ -56,7 +56,7 @@
               <td><?= $actor->getActorId() ?></td>
               <td><?= $actor->getFirstName() ?></td>
               <td><?= $actor->getLastName() ?></td>
-              <td><?= $actor->getBirthName() ?></td>
+              <td><?= $actor->getBirthDate() ?></td>
               <td><?= $actor->getNationality() ?></td>
               <td>
                 <a class="btn btn-success" href="editActor.php?id=<?= $actor->getActorId() ?>">Editar</a>
@@ -77,5 +77,6 @@
       </tbody>
     </table>
   </div>
+  <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/footer.php';?>
 </body>
 </html>

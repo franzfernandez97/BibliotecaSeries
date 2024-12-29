@@ -29,6 +29,7 @@
   <title>Peliculas</title>
 </head>
 <body>
+  <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/navbar.php';?>
   <div class="container">
     <h1>Editar usuario</h1>
     <form action="" method="post">
@@ -51,4 +52,6 @@
       <button type="submit" class="btn btn-primary" name="editButton">Crear</button>
     </form>
   </div>
+  <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/footer.php';?>
 </body>
+</html>
