@@ -51,13 +51,9 @@ require_once "../../controllers/platformsController.php";
                         <input type="hidden" name="platformId" value="<?php echo $idPlatform; ?>">
                         <input type="submit" value="Editar" class="btn btn-primary" name="editBtn">
                     </div>
-
-                    <!-- Submit button inside the form 
-                    <button type="submit" class="btn btn-primary px-5 w-100">Crear</button>-->
                 </form>
             </div>
         </div>
-        <a href=""></a>
     </div>
     
     <?php // if the user inserted values 

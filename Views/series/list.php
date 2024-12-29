@@ -1,7 +1,7 @@
 <?php
 //Import libraries
 require_once "../../controllers/seriesController.php";
-
+require_once "../../controllers/platformsController.php";
 ?>
 
 <!DOCTYPE html>
@@ -49,7 +49,9 @@ require_once "../../controllers/seriesController.php";
                             <tr>
                                 <td><?php echo $series->getId ()?> </td>
                                 <td><?php echo $series->getTitle () ?> </td>
-                                <td><?php echo $series->getPlatformId() ?> </td>
+                                <td><?php 
+                                $platformObjt = getPlatformData((int)$series->getPlatformId());
+                                echo $platformObjt->getName() ?> </td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Acciones">
                                         <a class= "btn btn-success" href="edit.php?id=<?php echo $series->getId(); ?>">Editar</a>

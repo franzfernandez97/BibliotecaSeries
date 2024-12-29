@@ -24,8 +24,6 @@ require_once "../../controllers/platformsController.php";
         <?php 
             $idSerie = $_GET['id'];
             $serieObject = getSerieData((int)$idSerie);
-            $nameActualPlatform = getPlatformData((int)$idSerie);
-            
             $sendData = false;
             $serieEdited = false;
 
@@ -35,9 +33,7 @@ require_once "../../controllers/platformsController.php";
 
             if (isset($sendData)){
                 if (isset($_POST["serieTitle"]) && isset($_POST['platform'])){
-                    $serieTitle = $_POST["serieTitle"];
-                    $platformSelected = getPlatformIdByName($_POST['platform']);
-                    $serieEdited = updateSerie((int)$idSerie, (int)$serieTitle, (int)$platformSelected);
+                    $serieEdited = updateSerie((int)$_POST["serieId"], $_POST["serieTitle"], (int)$_POST['platform']);
                 }  
             }
 
@@ -48,11 +44,12 @@ require_once "../../controllers/platformsController.php";
         <!-- Link to create View -->
         <div class="row justify-content-center">
             <div class="col-md-6"> <!-- Adjust column width for better alignment -->
-            <form  action="create.php" style="display:inline;" method="POST">
+            <form  action="edit.php?id=<?php echo $serieObject->getId(); ?>" style="display:inline;" method="POST">
                     <!-- Input serie tittle -->
                     <div class="mb-3">
                         <label for="serieTitle" class="form-label"></label>
-                        <input id="serieTitle" name="serieTitle" type="text" class="form-control" placeholder="<?php echo $serieObject->getTitle()?>" value="" required>
+                        <input id="serieTitle" name="serieTitle" type="text" class="form-control" placeholder="Ingresa un titulo" value="<?php echo $serieObject->getTitle()?>" required>
+                        <input type="hidden" name="serieId" value="<?php echo $serieObject->getId(); ?>">
                     </div>
 
                     <!-- Combo Box for Platform -->
@@ -63,10 +60,10 @@ require_once "../../controllers/platformsController.php";
                             <?php 
                             $plataformList = listPlatforms();
                             foreach ($plataformList as $platform) {
-                                if ($platform->getName() == $nameActualPlatform->getName()){
-                                    echo "<option value='".$platform->getName()."' selected>".$platform->getName()."</option>";
+                                if ($platform->getId() == $serieObject->getplatformid()){
+                                    echo "<option value='".$platform->getId()."' selected>".$platform->getName()."</option>";
                                 }else{
-                                    echo "<option value='".$platform->getName()."'>".$platform->getName()."</option>";
+                                    echo "<option value='".$platform->getId()."'>".$platform->getName()."</option>";
                                 }
                             }
                             ?>
@@ -74,11 +71,10 @@ require_once "../../controllers/platformsController.php";
                     </div>
 
                     <!-- Submit button inside the form -->
-                    <input type="submit" value="Crear" class="btn btn-primary" name="createBtn">
+                    <input type="submit" value="Editar" class="btn btn-primary" name="editBtn">
                 </form>
             </div>
         </div>
-        <a href=""></a>
     </div>
     
     <?php // if the user inserted values 
@@ -88,19 +84,19 @@ require_once "../../controllers/platformsController.php";
     ?>  
             <div class='alert alert-success' role='alert'>
             ¡Plataforma editada con éxito!  <a href='list.php'>Volver al listado de plataformas.</a>
-            </div>;
+            </div>
 
     <?php            
             } else {
                 // Warning Message
     ?>                        
                 <div class='alert alert-danger' role='alert'>
-                    ¡Plataforma no se ha editado!  <a href='edit.php?id=<?php echo $idSerie?>'>Refrescar.</a>
+                    ¡Plataforma no se ha editado!  <a href='edit.php?id=<?php echo $_POST["serieId"]?>'>Refrescar.</a>
                 </div>
     <?php
             }
         }
     ?>
      <!-- Footer-->  
-     <?php include '..\..\includes\footer.php';?> 
+     <?php include '..\..\includes\footer.php'?> 
 </body>

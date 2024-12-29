@@ -42,9 +42,8 @@ require_once "../../controllers/platformsController.php";
             //If platform Name exists
 
             if (isset($_POST["serieTitle"]) && isset($_POST['platform'])){
-                $platformSelected= getPlatformIdByName($_POST['platform']);
                 $serieTitle = $_POST["serieTitle"];
-                $serieCreated = createSerie($serieTitle,$platformSelected->getId());
+                $serieCreated = createSerie($serieTitle,(int)$_POST['platform']);
    
             }  
         }
@@ -73,7 +72,7 @@ require_once "../../controllers/platformsController.php";
                             <?php 
                             $plataformList = listPlatforms();
                             foreach ($plataformList as $platform) {
-                            echo "<option value='".$platform->getName()."'>".$platform->getName()."</option>";
+                            echo "<option value='".$platform->getId()."'>".$platform->getName()."</option>";
                             }
                             ?>
                         </select>

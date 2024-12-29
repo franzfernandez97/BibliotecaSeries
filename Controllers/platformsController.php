@@ -77,21 +77,5 @@ function deletePlatform ($idPlatform){
     $platformDeleted = $platform->delete();
     return $platformDeleted;
 }
-
-function getPlatformIdByName($platformName){
-    //check if pass different arguments than 1
-    if (func_num_args() !== 1) {
-        throw new InvalidArgumentException("Error funcion getPlatformIdByName: requiere exactamente 1 parametro.");
-    }
-
-    // is $platformName an INT?
-    if (!is_string($platformName)) {
-        throw new InvalidArgumentException("Error funcion getPlatformIdByName: parametro 'platformName' debe ser un número entero (str).");
-    }
-    $platform = new Platform(null,$platformName);
-    $platformObject = $platform->getItemByName();
-    return $platformObject; 
-}
-
 ?>
 

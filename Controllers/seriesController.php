@@ -34,8 +34,8 @@ function createSerie ($titleSerie,$idSerie){
 
 function updateSerie ($idSerie, $titleSerie, $idPlatform){
     //check if pass different arguments than 1
-    if (func_num_args() !== 2) {
-        throw new InvalidArgumentException("Error funcion updateSerie: requiere exactamente 2 parametros.");
+    if (func_num_args() !== 3) {
+        throw new InvalidArgumentException("Error funcion updateSerie: requiere exactamente 3 parametros.");
     }
 
     // is $idSerie an INT?

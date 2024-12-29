@@ -144,25 +144,5 @@ class Platform {
 
         return $deleted;
     }
-
-    public function getItemByName(){
-
-        $mysqli = Database::getDbConnection();
-        // Use prepared statement to prevent SQL injection
-        $stmt = $mysqli->prepare("SELECT * FROM $this->table WHERE name = ?");
-        $stmt->bind_param("s", $this->name);  // 's' denotes that we're passing a string
-
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        //if exist a result
-        if ($result->num_rows > 0){
-            foreach ($result as $item){
-                $itemObject = new Platform($item["id"], $item["name"]);
-                return $itemObject;
-            }
-        }
-        return false;
-    }
 }
 ?>
