@@ -11,7 +11,7 @@ function listSeries(){
     return $seriesList;
 }
 
-function createSerie ($titleSerie,$idPlatform){
+function createSerie ($titleSerie,$idSerie){
     //check if pass different arguments than 1
     if (func_num_args() !== 2) {
         throw new InvalidArgumentException("Error funcion createSerie: requiere exactamente 1 parametro.");
@@ -23,13 +23,27 @@ function createSerie ($titleSerie,$idPlatform){
     }
 
     // the argument is not int?
-    if (!is_int($idPlatform)) {
-        throw new InvalidArgumentException("Error funcion createSerie: parametro idPlatform debe ser un int.");
+    if (!is_int($idSerie)) {
+        throw new InvalidArgumentException("Error funcion createSerie: parametro idSerie debe ser un int.");
     }
 
-    $newSerie = new Series(null, $titleSerie,$idPlatform);
+    $newSerie = new Series(null, $titleSerie,$idSerie);
     $isCreated = $newSerie->create();
     return $isCreated ;
 }
 
+function deleteSerie ($idSerie){
+    //check if pass different arguments than 1
+    if (func_num_args() !== 1) {
+        throw new InvalidArgumentException("Error funcion deletePlatform: requiere exactamente 1 parametro.");
+    }
+
+    // is $idSerie an INT?
+    if (!is_int($idSerie)) {
+        throw new InvalidArgumentException("Error funcion deletePlatform: parametro 'idSerie' debe ser un número entero (int).");
+    }
+    $platform = new Series($idSerie,null,null);
+    $platformDeleted = $platform->delete();
+    return $platformDeleted;
+}
 ?>
