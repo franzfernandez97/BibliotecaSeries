@@ -1,110 +1,156 @@
 <?php
   require_once 'database.php';
-  require_once $_SERVER['DOCUMENT_ROOT'] . '/config/config.php';
 
 
   class Actors {
-    private $db;
+
     private $table = 'actors';
+    private $actorId;
+    private $firstName;
+    private $lastName;
+    private $birthDate;
+    private $nationality;
 
-    public function __construct() {
-      // Load the database credentials using the simplified Config class
-      $credentials = Config::getDbCredentials();
-
-      // Create an instance of the Database class and connect to DB
-      $dbInstance = new Database($credentials['host'], $credentials['user'], $credentials['password'], $credentials['dbname']);
-      $connection = $dbInstance->connect();
-
-      // If connection fails (returns an error message), exit
-      if (is_string($connection)) {
-          echo $connection;
-          exit;
-      }
-
-      // Otherwise, set the connection
-      $this->db = $connection;
+    public function __construct($actorId=null, $firstName=null, $lastName=null, $birthDate=null, $nationality=null) {
+      $this->actorId = $actorId;
+      $this->firstName = $firstName;
+      $this->lastName = $lastName;
+      $this->birthDate = $birthDate;
+      $this->nationality = $nationality;
     }
-    public function getAll() {
+    //GETTERS
+    public function getActorId():int {
+      return $this->actorId;
+    }
+    public function getFirstName():string {
+      return $this->firstName;
+    }
+    public function getLastName():string {
+      return $this->lastName;
+    }
+    public function getbirthDate():string {
+      return $this->birthDate;
+    }
+    public function getNationality():string {
+      return $this->nationality;
+    }
+    //SETTERS
+    public function setActorId(int $actorId): void {
+      $this->actorId = $actorId;
+    }
+    public function setFirstName(string $firstName): void {
+      $this->firstName = $firstName;
+    }
+    public function setLastName(string $lastName): void {
+      $this->lastName = $lastName;
+    }
+    public function setbirthDate(string $birthDate): void {
+      $this->birthDate = $birthDate;
+    }
+    public function setNationality(string $nationality): void {
+      $this->nationality = $nationality;
+    }
+    public function getAll():Array {
+      $mysqli = Database::getDbConnection();
       $query = "SELECT * FROM $this->table";
-      $result = $this->db->query($query);
+      $result = $mysqli->query($query);
+      $listData = [];
+
       if ($result->num_rows > 0) {
-        $actors = [];
-        while ($row = $result->fetch_assoc()) {
-          $actors[] = $row;
-        }
-        return $actors;
-      } else {
-          return [];
-      }
-    }
-
-    public function getById(int $id):array | string | null {
-      $query = "SELECT * FROM $this->table WHERE id = ?";
-      try {
-        if ($stmt = $this->db->prepare($query)) {
-          $stmt->bind_param("i", $id);
-          $stmt->execute();
-          $result = $stmt->get_result();
-          if ($result->num_rows > 0) {
-            $actor = [];
-            while ($row = $result->fetch_assoc()) {
-              $actor[] = $row;
-            }
-            $stmt->close();
-            return $actor;
-          } else {
-              return [];
+          foreach ($result as $item){
+            $itemObject = new Actors((int)$item['id'], $item['firstname'], $item['lastname'], $item['birthdate'], $item['nationality']);
+            array_push($listData, $itemObject);
           }
-        }
-      }catch (mysqli_sql_exception $e) {
-        return $e->getMessage();
       }
+      $mysqli->close();
+      return $listData;
     }
 
-    public function createActor(array $data):int | string {
-      $query = "INSERT INTO $this->table (firstname, lastname, birthdate, nationality) VALUES (?,?,?,?)";
-
-      if ($stmt = $this->db->prepare($query)) {
-        $stmt->bind_param("ssss", $data[0],$data[1],$data[2],$data[3]);
-        if($stmt->execute()) {
-          $idCreated = $this->db->insert_id;
-          $stmt->close();
-          return $idCreated;
+    public function getById():array{
+      $mysqli = Database::getDbConnection();
+      $query = 'SELECT * FROM platforms WHERE id = ?';
+      $stmt = $mysqli->prepare($query);
+      $stmt->bind_param('i', $this->actorId);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $actor = [];
+      if ($result->num_rows > 0) {
+        foreach ($result as $item){
+          $itemObject = new Actors($item['id'], $item['firstname'], $item['lastname'], $item['birthdate'], nationality: $item['nationality']);
+          array_push($actor, $itemObject);
         }
       }
-    }
-    public function updateActor($id, $data): bool|string|mysqli_stmt{
-      $query = "UPDATE $this->table SET firstname = ?, lastname = ?, birthdate = ?, nationality = ? WHERE id = ?";
-
-      if ($stmt = $this->db->prepare($query)) {
-        $stmt->bind_param("ssssi", $data[0], $data[1], $data[2], $data[3], $id);
-        if ($stmt->execute()) {
-            $stmt->close();
-            return true;
-        } else {
-          $stmt->close();
-          return "Error: " . $stmt->error . "\n";
-        }
-      }
+      $mysqli->close();
+      return $actor;
     }
 
-    public function deleteActor($id):bool|string {
-      try {
-        $query = "DELETE FROM $this->table WHERE id = ?";
-        if ($stmt = $this->db->prepare($query)) {
-          $stmt->bind_param("i", $id);
-          if ($stmt->execute()) {
-            $stmt->close();
-            return true;
-          } else {
-            $stmt->close();
-            return false;
+    public function createActor(){
+      $platformCreated = false;
+      $mysqli = Database::getDbConnection();
+
+      // Use prepared statement to prevent SQL injection
+      $stmt = $mysqli->prepare("SELECT firstname, lastname, birthdate, nationality FROM $this->table WHERE firstname = ?, lastname = ?");
+      $stmt->bind_param("ss", $this->firstName, $this->lastName);
+
+      $stmt->execute();
+      $result = $stmt->get_result();
+
+      if ($result->num_rows <= 0) {
+          //if dont exits its going to create it
+          $insertStmt = $mysqli->prepare("INSERT INTO $this->table (firstname,lastname,birthdate,nationality) VALUES (?,?,?,?)");
+          $insertStmt->bind_param("ssss", $this->firstName, $this->lastName, $this->birthDate, $this->nationality);
+
+          if ($insertStmt->execute()) {
+              $platformCreated = true;  // Platform created successfully
           }
-        }
-      } catch(mysqli_sql_exception $e) {
-        return $e->getMessage();
       }
+
+      $stmt->close();
+      $mysqli->close();
+      return $platformCreated;
     }
+    public function updateActor() {
+      $platformUpdated = false;
+      $mysqli = Database::getDbConnection();
+
+      // Prepare the update statement to prevent SQL injection
+      $stmt = $mysqli->prepare("UPDATE $this->table SET firstname=?,lastname=?,birthdate=?,nationality=? WHERE id = ?");
+      $stmt->bind_param("ssssi", $this->firstName, $this->lastName, $this->birthDate, $this->nationality, $this->actorId);
+
+      // Execute the statement
+      if ($stmt->execute()) {
+          // Check if any row was affected (i.e., if the update was successful)
+          if ($stmt->affected_rows > 0) {
+              $platformUpdated = true;
+          }
+      }
+      $stmt->close();
+      $mysqli->close();
+
+      return $platformUpdated;
+  }
+
+  public function delete(){
+    $deleted = false;
+    $mysqli = Database::getDbConnection();
+
+    //prepate statement to Prevent sql injection
+    $stmt = $mysqli->prepare("DELETE FROM $this->table WHERE id = ?");
+    $stmt->bind_param("i", $this->actorId);
+
+    //execute the statement
+    if ($stmt->execute()){
+        //check rows
+        if($stmt->affected_rows > 0){
+            $deleted = true; //record succesfully deleted
+        }
+    }
+    // Close the statement and connection
+    $stmt->close();
+    $mysqli->close();
+
+    return $deleted;
+  }
 
   }
 ?>
