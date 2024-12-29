@@ -1,5 +1,5 @@
 <?php
-  require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/actorsController.php';
+  require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/actorsController.php';
   $actorList = listActors();
 ?>
 
@@ -14,11 +14,7 @@
 </head>
 <body>
   <!-- Nav Bar-->
-<<<<<<< HEAD
-  <?php include $_SERVER['DOCUMENT_ROOT'] .'/BibliotecaSeries/includes/navbar.php';?>
-=======
   <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/navbar.php';?>
->>>>>>> felipe
 
   <div class="container text-center mt-5 content" >
     <h1 class="display-3">Lista de actores</h1>
