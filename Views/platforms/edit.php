@@ -23,7 +23,7 @@ require_once "../../controllers/platformsController.php";
         <h1 class="display-3">Editar Plataforma </h1>
         <?php 
             $idPlatform = $_GET['id'];
-            $platformObject = getPlatformData($idPlatform);
+            $platformObject = getPlatformData((int)$idPlatform);
 
             $sendData = false;
             $platformEdited = false;
@@ -66,7 +66,7 @@ require_once "../../controllers/platformsController.php";
         if ($platformEdited) {
     ?>  
             <div class='alert alert-success' role='alert'>
-            ¡Plataforma '<?php $idPlatform ?>' editada con éxito!  <a href='list.php'>Volver al listado de plataformas.</a>
+            ¡Plataforma editada con éxito!  <a href='list.php'>Volver al listado de plataformas.</a>
             </div>;
 
     <?php            

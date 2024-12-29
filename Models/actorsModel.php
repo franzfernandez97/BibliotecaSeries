@@ -8,14 +8,14 @@
     private $actorId;
     private $firstName;
     private $lastName;
-    private $birthName;
+    private $birthDate;
     private $nationality;
 
-    public function __construct($actorId, $firstName, $lastName, $birthName, $nationality) {
+    public function __construct($actorId=null, $firstName=null, $lastName=null, $birthDate=null, $nationality=null) {
       $this->actorId = $actorId;
       $this->firstName = $firstName;
       $this->lastName = $lastName;
-      $this->birthName = $birthName;
+      $this->birthDate = $birthDate;
       $this->nationality = $nationality;
     }
     //GETTERS
@@ -28,8 +28,8 @@
     public function getLastName():string {
       return $this->lastName;
     }
-    public function getBirthName():string {
-      return $this->birthName;
+    public function getbirthDate():string {
+      return $this->birthDate;
     }
     public function getNationality():string {
       return $this->nationality;
@@ -44,8 +44,8 @@
     public function setLastName(string $lastName): void {
       $this->lastName = $lastName;
     }
-    public function setBirthName(string $birthName): void {
-      $this->birthName = $birthName;
+    public function setbirthDate(string $birthDate): void {
+      $this->birthDate = $birthDate;
     }
     public function setNationality(string $nationality): void {
       $this->nationality = $nationality;
@@ -58,7 +58,7 @@
 
       if ($result->num_rows > 0) {
           foreach ($result as $item){
-            $itemObject = new Actors($item['id'], $item['firstname'], $item['lastname'], $item['birthname'], $item['nationality']);
+            $itemObject = new Actors((int)$item['id'], $item['firstname'], $item['lastname'], $item['birthdate'], $item['nationality']);
             array_push($listData, $itemObject);
           }
       }
@@ -66,17 +66,17 @@
       return $listData;
     }
 
-    public function getById(int $id):array{
+    public function getById():array{
       $mysqli = Database::getDbConnection();
       $query = 'SELECT * FROM platforms WHERE id = ?';
       $stmt = $mysqli->prepare($query);
-      $stmt->bind_param('i', $id);
+      $stmt->bind_param('i', $this->actorId);
       $stmt->execute();
       $result = $stmt->get_result();
       $actor = [];
       if ($result->num_rows > 0) {
         foreach ($result as $item){
-          $itemObject = new Actors($item['id'], $item['firstname'], $item['lastname'], $item['birthname'], $item['nationality']);
+          $itemObject = new Actors($item['id'], $item['firstname'], $item['lastname'], $item['birthdate'], nationality: $item['nationality']);
           array_push($actor, $itemObject);
         }
       }
@@ -84,50 +84,73 @@
       return $actor;
     }
 
-    public function createActor(array $data):int | string {
-      $query = "INSERT INTO $this->table (firstname, lastname, birthdate, nationality) VALUES (?,?,?,?)";
+    public function createActor(){
+      $platformCreated = false;
+      $mysqli = Database::getDbConnection();
 
-      if ($stmt = $this->db->prepare($query)) {
-        $stmt->bind_param("ssss", $data[0],$data[1],$data[2],$data[3]);
-        if($stmt->execute()) {
-          $idCreated = $this->db->insert_id;
-          $stmt->close();
-          return $idCreated;
-        }
-      }
-    }
-    public function updateActor($id, $data): bool|string|mysqli_stmt{
-      $query = "UPDATE $this->table SET firstname = ?, lastname = ?, birthdate = ?, nationality = ? WHERE id = ?";
+      // Use prepared statement to prevent SQL injection
+      $stmt = $mysqli->prepare("SELECT firstname, lastname, birthdate, nationality FROM $this->table WHERE firstname = ?, lastname = ?");
+      $stmt->bind_param("ss", $this->firstName, $this->lastName);
 
-      if ($stmt = $this->db->prepare($query)) {
-        $stmt->bind_param("ssssi", $data[0], $data[1], $data[2], $data[3], $id);
-        if ($stmt->execute()) {
-            $stmt->close();
-            return true;
-        } else {
-          $stmt->close();
-          return "Error: " . $stmt->error . "\n";
-        }
-      }
-    }
+      $stmt->execute();
+      $result = $stmt->get_result();
 
-    public function deleteActor($id):bool|string {
-      try {
-        $query = "DELETE FROM $this->table WHERE id = ?";
-        if ($stmt = $this->db->prepare($query)) {
-          $stmt->bind_param("i", $id);
-          if ($stmt->execute()) {
-            $stmt->close();
-            return true;
-          } else {
-            $stmt->close();
-            return false;
+      if ($result->num_rows <= 0) {
+          //if dont exits its going to create it
+          $insertStmt = $mysqli->prepare("INSERT INTO $this->table (firstname,lastname,birthdate,nationality) VALUES (?,?,?,?)");
+          $insertStmt->bind_param("ssss", $this->firstName, $this->lastName, $this->birthDate, $this->nationality);
+
+          if ($insertStmt->execute()) {
+              $platformCreated = true;  // Platform created successfully
           }
-        }
-      } catch(mysqli_sql_exception $e) {
-        return $e->getMessage();
       }
+
+      $stmt->close();
+      $mysqli->close();
+      return $platformCreated;
     }
+    public function updateActor() {
+      $platformUpdated = false;
+      $mysqli = Database::getDbConnection();
+
+      // Prepare the update statement to prevent SQL injection
+      $stmt = $mysqli->prepare("UPDATE $this->table SET firstname=?,lastname=?,birthdate=?,nationality=? WHERE id = ?");
+      $stmt->bind_param("ssssi", $this->firstName, $this->lastName, $this->birthDate, $this->nationality, $this->actorId);
+
+      // Execute the statement
+      if ($stmt->execute()) {
+          // Check if any row was affected (i.e., if the update was successful)
+          if ($stmt->affected_rows > 0) {
+              $platformUpdated = true;
+          }
+      }
+      $stmt->close();
+      $mysqli->close();
+
+      return $platformUpdated;
+  }
+
+  public function delete(){
+    $deleted = false;
+    $mysqli = Database::getDbConnection();
+
+    //prepate statement to Prevent sql injection
+    $stmt = $mysqli->prepare("DELETE FROM $this->table WHERE id = ?");
+    $stmt->bind_param("i", $this->actorId);
+
+    //execute the statement
+    if ($stmt->execute()){
+        //check rows
+        if($stmt->affected_rows > 0){
+            $deleted = true; //record succesfully deleted
+        }
+    }
+    // Close the statement and connection
+    $stmt->close();
+    $mysqli->close();
+
+    return $deleted;
+  }
 
   }
 ?>

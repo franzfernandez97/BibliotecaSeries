@@ -3,12 +3,12 @@
 /**
  * Attach confirmDelete functionality to forms with the name "delete_platform".
  */
-document.querySelectorAll('form[name="delete_platform"]').forEach(form => {
+document.querySelectorAll('form[name="delete_form"]').forEach(form => {
     form.addEventListener("submit", function (event) {
         event.preventDefault(); // Prevent the form from submitting immediately
 
         const userConfirmed = confirm(
-            "¿Está seguro de eliminar esta plataforma? Todas las series asociadas a ella serán eliminadas."
+            "¿Está seguro de  ejecutar esta operación? Ten encuenta que información relacionada a este registro podría ser eliminada y no se podrá recuperar"
         );
 
         if (userConfirmed) {
