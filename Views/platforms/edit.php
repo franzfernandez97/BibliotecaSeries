@@ -23,7 +23,7 @@ require_once "../../controllers/platformsController.php";
         <h1 class="display-3">Editar Plataforma </h1>
         <?php 
             $idPlatform = $_GET['id'];
-            $platformObject = getPlatformData($idPlatform);
+            $platformObject = getPlatformData((int)$idPlatform);
 
             $sendData = false;
             $platformEdited = false;
