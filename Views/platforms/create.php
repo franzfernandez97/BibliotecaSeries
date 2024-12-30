@@ -81,7 +81,7 @@ require_once "../../controllers/platformsController.php";
                 // ElseWarning Message
     ?>                        
                 <div class='alert alert-danger' role='alert'>
-                    ¡Plataforma no ha sido creada ! ya esxiste en la DB. Por favor ingrese otro nombre <a href='create.php'>Refrescar.</a>
+                    ¡Plataforma no ha sido creada ! ya existe en la DB. Por favor ingrese otro nombre <a href='create.php'>Refrescar.</a>
                 </div>
     <?php
             }

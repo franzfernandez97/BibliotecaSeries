@@ -73,7 +73,6 @@
       $stmt->bind_param('i', $this->actorId);
       $stmt->execute();
       $result = $stmt->get_result();
-      $actor = [];
       if ($result->num_rows > 0){
         foreach ($result as $item){
             $itemObject = new Actors($item["id"], $item["firstname"], $item['lastname'], $item['birthdate'], nationality: $item['nationality']);

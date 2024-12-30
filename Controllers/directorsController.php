@@ -1,54 +1,18 @@
 <?php
-require_once '../Models/DirectoresModel.php';
+require_once '../../Models/directorsModel.php';
 
-class DirectoresController {
-
-    private $directores;
-
-    public function __construct() {
-        // Create an instance of the directores model
-        $this->directores = new directores();;
+function listDirectors(){
+    //check no arguments were used
+    if (func_num_args()> 0){
+        throw new InvalidArgumentException( "Error función listDirectors: no acepta parametros");
     }
-
-    // Handle the CREATE action (Add a new platform)
-    public function create($name) {
-        if (!empty($name)) {
-            // Call the create method from the directores model
-            $this->directores->create($name);
-        } else {
-            // You can handle errors here or return them if needed
-            return "Error: Name cannot be empty.";
-        }
+    $model = new Directors();
+    $directorList = $model->getAll();
+    foreach ($directorList as $director){
+       $director->setBirthDate(date('d/m/Y', strtotime($director->getBirthDate())));
     }
-
-    // Handle the READ action (Get all platforms)
-    public function getAll() {
-        // Call the getAll method from the directores model
-        return $this->directores->getAll();
-    }
-
-    // Handle the READ action (Get a platform by ID)
-    public function getById($id) {
-        // Call the getById method from the directores model
-        return $this->directores->getById(strval($id));
-    }
-
-    // Handle the UPDATE action (Update a platform by ID)
-    public function update($id, $name) {
-        if (!empty($name)) {
-            // Call the update method from the directores model
-            $this->directores->update($id, $name);
-        } else {
-            // You can handle errors here or return them if needed
-            return "Error: Name cannot be empty.";
-        }
-    }
-
-    // Handle the DELETE action (Delete a platform by ID)
-    public function delete($id) {
-        // Call the delete method from the directores model
-        $this->directores->delete($id);
-    }
+    return $directorList;
 }
+
 ?>
 
