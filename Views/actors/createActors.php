@@ -1,6 +1,8 @@
 <?php
   require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/actorsController.php';
-  require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/Controllers/seriesController.php';
+  require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/seriesController.php';
+  require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/actorSeriesController.php';
+
 
   $series = listSeries();
 
@@ -21,12 +23,12 @@
 
     <!-- Main Info-->
     <div class="container text-center mt-5 content">
-        <h1 class="display-3">Crear Actor </h1>
+        <h1 class="display-4">Crear Actor </h1>
 
         <?php
         // initial state before execution
         $sendData = false;
-        $platformCreated = false;
+        $actorCreated = false;
 
         // If the buttom -Create- was clic
         // then sendData is true
@@ -37,10 +39,20 @@
         // If sendData is true
         if (isset($sendData)){
             //Check if POST variable platformName was assigned to create a platform
-
-            if (isset($_POST["platformName"])){
-                $platformCreated = createPlatform($_POST["platformName"]);
+            if (isset($_POST["firstName"]) && isset($_POST["lastName"]) && isset($_POST["birthDate"]) && isset($_POST["nationality"])){
+                $platformCreated = createActor(firstName: $_POST["firstName"], lastName: $_POST["lastName"], birthDate: $_POST["birthDate"], nationality: $_POST["nationality"]);
             }
+
+
+            if (!empty($_POST['series']) && is_array($_POST['series'])) {
+              $seriesSelected = $_POST['series']; // Aquí tienes todas las
+              $seriesId = [];
+              // Ejemplo: Mostrar los valores seleccionados
+              foreach ($seriesSelected as $serieId) {
+                array_push($seriesId, $serieId);
+              }
+              addActorToSeries($platformCreated, $seriesId);
+          }
         }
 
         //If is the first time a user enter then $sendData is False
@@ -51,8 +63,8 @@
 
         <!-- Link to create View -->
         <div class="row justify-content-center w-100">
-            <div class="w-50 align-items-center"> <!-- Adjust column width for better alignment -->
-                <form  action="create.php" class="d-flex flex-column" method="POST">
+            <div class="w-50 align-items-center mb-10"> <!-- Adjust column width for better alignment -->
+                <form  action="createActors.php" class="d-flex flex-column mb-10" method="POST">
                     <div class="mb-3 d-flex flex-column align-items-start">
                         <label for="firstName" class="form-label">Nombres</label>
                         <input id="firstName" name="firstName" type="text" class="form-control" placeholder="Julian" value="" required>
@@ -71,19 +83,23 @@
                     </div>
                     <div class="mb-3 d-flex flex-column align-items-start">
                         <label for="series" class="form-label">Series en que trabajó</label>
-                        <select name="series[]" id="series" class="form-control" multiple>
+                        <select id="series" name="series[]" class="w-100 checkbox-list" multiple aria-label="multiple select example">
+                          <option value="<?=(int)0?>" selected> --Seleccione una opción-- </option>
                           <?php foreach ($series as $serie): ?>
-                            <option value="<?= $serie->getId() ?>"><?= $serie->getTitle() ?></option>
+                              <option value="<?= (int)$serie->getId() ?>">
+                                <?= $serie->getTitle() ?>
+                              </option>
                           <?php endforeach; ?>
                         </select>
                     </div>
 
                     <!-- Submit button inside the form -->
                     <input type="submit" value="Crear" class="btn btn-primary" name="createBtn">
-                    <!--<button type="submit" class="btn btn-primary px-5 w-100">Crear</button>-->
                 </form>
             </div>
         </div>
+        <!-- Footer-->
+      <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/footer.php';?>
     </div>
 
     <?php
@@ -95,21 +111,18 @@
             if ($platformCreated){
     ?>
             <div class='alert alert-success' role='alert'>
-                ¡Plataforma '<?php $_POST['platformName']?>' creada con éxito! <a href='list.php'>Volver al listado de plataformas.</a>
+                ¡El actor fue creado con éxito! <a href='list.php'>Volver al listado de plataformas.</a>
             </div>;
     <?php
             } else {
                 // ElseWarning Message
     ?>
                 <div class='alert alert-danger' role='alert'>
-                    ¡Plataforma no ha sido creada ! ya esxiste en la DB. Por favor ingrese otro nombre <a href='create.php'>Refrescar.</a>
+                    ¡Plataforma no ha sido creada ! ya esxiste en la DB. Por favor ingrese otro nombre <a href='createActors.php'>Refrescar.</a>
                 </div>
     <?php
             }
         }
     ?>
-
-     <!-- Footer-->
-     <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/footer.php';?>
 </body>
 </html>

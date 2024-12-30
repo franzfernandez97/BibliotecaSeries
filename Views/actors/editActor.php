@@ -1,57 +1,141 @@
 <?php
-  require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/actorsController.php';
-  require_once $_SERVER['DOCUMENT_ROOT'] . '/constants/style.php';
+  require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/actorsController.php';
+  require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/seriesController.php';
+  require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/actorSeriesController.php';
 
-  $actors = new ActorsController();
   $actorId = (int)$_GET['id'];
-  $actor = $actors->getById($actorId);
-  $sendData = false;
-  $actorEdit = false;
-  if (isset($_POST['editButton'])) {
-    $sendData = true;
-  }
-  if ($sendData){
-    $name = $_POST["firstname"];
-    $lastName = $_POST["lastname"];
-    $birthDate = $_POST["birthdate"];
-    $nationality = $_POST["nationality"];
-    $data = [$name, $lastName, $birthDate, $nationality];
-    $result = $actors->updateActor($actorId, $data);
+  $seriesActor = listSeriesByActor(actorId: $actorId);
+  $actor = getActor(actorId: $actorId);
+  $series = listSeries();
+  $listSeries = [];
+  foreach ($seriesActor as $serie){
+    array_push($listSeries, $serie->getId());
   }
 
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <title>Peliculas</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a Platform</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
-  <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/navbar.php';?>
-  <div class="container">
-    <h1>Editar usuario</h1>
-    <form action="" method="post">
-      <div class="form-group">
-        <label for="names">Nombres</label>
-        <input type="text" class="form-control" id="name" name="firstname" value="<?= htmlspecialchars($actor[0]["firstname"] ?? '') ?>" placeholder="Nombre">
-      </div>
-      <div class="form-group">
-        <label for="lastname">Apellidos</label>
-        <input type="text" class="form-control" id="lastname"  name="lastname" value="<?= htmlspecialchars($actor[0]["lastname"] ?? '') ?>" placeholder="Apellidos">
-      </div>
-      <div class="form-group">
-        <label for="birthdate">Fecha de nacimiento</label>
-        <input type="date" class="form-control" id="birthdate" name="birthdate" value="<?= htmlspecialchars($actor[0]["birthdate"] ?? '') ?>" placeholder="Fecha de nacimiento">
-      </div>
-      <div class="form-group">
-        <label for="nationality">Nacionalidad</label>
-        <input type="text" class="form-control" id="nationality" value="<?= htmlspecialchars($actor[0]["nationality"] ?? '') ?>" name="nationality" placeholder="Nacionalidad">
-      </div>
-      <button type="submit" class="btn btn-primary" name="editButton">Crear</button>
-    </form>
-  </div>
-  <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/footer.php';?>
+      <!-- Nav Bar-->
+      <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/navbar.php';?>
+
+    <!-- Main Info-->
+    <div class="container text-center mt-5 content">
+        <h1 class="display-4">Editar Actor </h1>
+
+        <?php
+        // initial state before execution
+        $sendData = false;
+        $actorCreated = false;
+
+        // If the buttom -Create- was clic
+        // then sendData is true
+        if (isset($_POST["editButton"])){
+            $sendData = true;
+        }
+
+        // If sendData is true
+        if (isset($sendData)){
+            //Check if POST variable platformName was assigned to create a platform
+            if (isset($_POST["firstName"]) && isset($_POST["lastName"]) && isset($_POST["birthDate"]) && isset($_POST["nationality"])){
+                $platformCreated = updateActor(actorId: $actorId,firstName: $_POST["firstName"], lastName: $_POST["lastName"], birthDate: $_POST["birthDate"], nationality: $_POST["nationality"]);
+            }
+
+
+            if (!empty($_POST['series']) && is_array($_POST['series'])) {
+              $seriesSelected = $_POST['series']; // Aquí tienes todas las
+              $seriesId = [];
+              // Ejemplo: Mostrar los valores seleccionados
+              foreach ($seriesSelected as $serieId) {
+                array_push($seriesId, $serieId);
+              }
+              updateActorSeries($actorId, $seriesId);
+          }
+        }
+
+        //If is the first time a user enter then $sendData is False
+        // a new user will se the form
+        if (!$sendData){
+
+        ?>
+
+        <!-- Link to create View -->
+        <div class="row justify-content-center w-100">
+            <div class="w-50 align-items-center mb-10"> <!-- Adjust column width for better alignment -->
+                <form  action="editActor.php?id=<?= $actor->getActorId() ?>" class="d-flex flex-column mb-10" method="POST">
+                    <div class="mb-3 d-flex flex-column align-items-start">
+                        <label for="firstName" class="form-label">Nombres</label>
+                        <input id="firstName" name="firstName" type="text" class="form-control" placeholder="Ingrese un nombre" value="<?= $actor->getFirstName() ?>" required>
+                    </div>
+                    <div class="mb-3 d-flex flex-column align-items-start">
+                        <label for="lastName" class="form-label">Apellidos</label>
+                        <input id="lastName" name="lastName" type="text" class="form-control" placeholder="Ingrese los apellidos" value="<?= $actor->getLastName() ?>" required>
+                    </div>
+                    <div class="mb-3 d-flex flex-column align-items-start">
+                        <label for="birthDate" class="form-label">Fecha de nacimiento</label>
+                        <input id="birthDate" name="birthDate" type="date" class="form-control" value="<?= $actor->getbirthDate() ?>" required>
+                    </div>
+                    <div class="mb-3 d-flex flex-column align-items-start">
+                        <label for="nationality" class="form-label">Nacionalidad</label>
+                        <input id="nationality" name="nationality" type="text" class="form-control" placeholder="Ingrese la necionalidad" value="<?= $actor->getNationality() ?>" required>
+                    </div>
+                    <div class="mb-3 d-flex flex-column align-items-start">
+                        <label for="series" class="form-label">Series en que trabajó</label>
+                        <select id="series" name="series[]" class="w-100 checkbox-list" multiple aria-label="multiple select example">
+                          <option value="<?=(int)0?>" > --Seleccione una opción-- </option>
+                          <?php foreach ($series as $serie):
+                            if(in_array($serie->getId(), $listSeries)) {
+                            ?>
+                              <option value="<?= (int)$serie->getId() ?>" selected>
+                                <?= $serie->getTitle() ?>
+                              </option>
+                            <?php } else { ?>
+                              <option value="<?= (int)$serie->getId() ?>">
+                                <?= $serie->getTitle() ?>
+                              </option>
+                          <?php }
+                          endforeach; ?>
+                        </select>
+                    </div>
+
+                    <!-- Submit button inside the form -->
+                    <input type="submit" value="Crear" class="btn btn-primary" name="editButton">
+                </form>
+            </div>
+        </div>
+        <!-- Footer-->
+      <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/footer.php';?>
+    </div>
+
+    <?php
+    //If the user clicked the Create buttom is going to see a message
+    //and this message can be positive or negative
+
+        }else{
+            //if the createPlatform was succesfully executed
+            if ($platformCreated){
+    ?>
+            <div class='alert alert-success' role='alert'>
+                ¡El actor fue creado con éxito! <a href='list.php'>Volver al listado de plataformas.</a>
+            </div>
+    <?php
+            } else {
+                // ElseWarning Message
+    ?>
+                <div class='alert alert-danger' role='alert'>
+                    ¡Plataforma no ha sido creada ! ya esxiste en la DB. Por favor ingrese otro nombre <a href='createActors.php'>Refrescar.</a>
+                </div>
+    <?php
+            }
+        }
+    ?>
 </body>
 </html>

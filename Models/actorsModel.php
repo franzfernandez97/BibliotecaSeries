@@ -20,7 +20,7 @@
     }
     //GETTERS
     public function getActorId():int {
-      return $this->actorId;
+      return (int)$this->actorId;
     }
     public function getFirstName():string {
       return $this->firstName;
@@ -66,22 +66,22 @@
       return $listData;
     }
 
-    public function getById():array{
+    public function getById(){
       $mysqli = Database::getDbConnection();
-      $query = 'SELECT * FROM platforms WHERE id = ?';
+      $query = 'SELECT * FROM actors WHERE id = ?';
       $stmt = $mysqli->prepare($query);
       $stmt->bind_param('i', $this->actorId);
       $stmt->execute();
       $result = $stmt->get_result();
       $actor = [];
-      if ($result->num_rows > 0) {
+      if ($result->num_rows > 0){
         foreach ($result as $item){
-          $itemObject = new Actors($item['id'], $item['firstname'], $item['lastname'], $item['birthdate'], nationality: $item['nationality']);
-          array_push($actor, $itemObject);
+            $itemObject = new Actors($item["id"], $item["firstname"], $item['lastname'], $item['birthdate'], nationality: $item['nationality']);
+            return $itemObject;
         }
       }
       $mysqli->close();
-      return $actor;
+      return false;
     }
 
     public function createActor(){
@@ -89,7 +89,7 @@
       $mysqli = Database::getDbConnection();
 
       // Use prepared statement to prevent SQL injection
-      $stmt = $mysqli->prepare("SELECT firstname, lastname, birthdate, nationality FROM $this->table WHERE firstname = ?, lastname = ?");
+      $stmt = $mysqli->prepare("SELECT firstname, lastname FROM $this->table WHERE firstname = ? AND lastname = ?");
       $stmt->bind_param("ss", $this->firstName, $this->lastName);
 
       $stmt->execute();
@@ -99,9 +99,9 @@
           //if dont exits its going to create it
           $insertStmt = $mysqli->prepare("INSERT INTO $this->table (firstname,lastname,birthdate,nationality) VALUES (?,?,?,?)");
           $insertStmt->bind_param("ssss", $this->firstName, $this->lastName, $this->birthDate, $this->nationality);
-
           if ($insertStmt->execute()) {
-              $platformCreated = true;  // Platform created successfully
+
+            $platformCreated = (int)$insertStmt->insert_id;  // Platform created successfully
           }
       }
 
