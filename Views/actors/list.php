@@ -23,29 +23,26 @@
             <a class="btn btn-primary px-5" href="createActors.php">Crear</a>
         </div>
     </div>
-    <table class="table">
+    <table class="table table-striped table-hover">
       <thead>
         <tr>
           <th>
-            ID
+            Id
           </th>
           <th>
-            NOMBRES
+            Nombres
           </th>
           <th>
-            APELLIDOS
+            Apellidos
           </th>
           <th>
-            FECHA DE NACIMIENTO
+            Fecha de nacimiento
           </th>
           <th>
-            NACIONALIDAD
+            Nacionalidad
           </th>
           <th>
-            Editar
-          </th>
-          <th>
-            Borrar
+            Acciones
           </th>
         </tr>
       </thead>
@@ -59,13 +56,15 @@
               <td><?= $actor->getBirthDate() ?></td>
               <td><?= $actor->getNationality() ?></td>
               <td>
-                <a class="btn btn-success" href="editActor.php?id=<?= $actor->getActorId() ?>">Editar</a>
-              </td>
-              <td>
-                <form name="deleteActor" action="deleteActor.php" method="POST">
-                  <input type="hidden" name="actorId" value="<?= $actor->getActorId() ?>">
-                  <button type="submit" class="btn btn-danger">Borrar</button>
-                </form>
+                <div class="d-flex justify-content-center gap-2" role="group" aria-label="Acciones">
+                  <a class="btn btn-success" href="editActor.php?id=<?= $actor->getActorId() ?>">Editar</a>
+
+                  <form name="deleteActor" action="deleteActor.php" method="POST">
+                    <input type="hidden" name="actorId" value="<?= $actor->getActorId() ?>">
+                    <button type="submit" class="btn btn-danger">Borrar</button>
+                  </form>
+                  <a class="btn btn-primary" href="actorInformation.php?id=<?= $actor->getActorId() ?>">Ver</a>
+                </div>
               </td>
             </tr>
           <?php endforeach; ?>
