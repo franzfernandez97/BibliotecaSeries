@@ -1,4 +1,4 @@
-<?php 
+<?php
     function generatePath(){
         // Assuming the base directory of your app is /BibliotecaSeries/
         $absolutePath = '/BibliotecaSeries/';
@@ -27,7 +27,7 @@
                     <a class="nav-link" href="<?php echo generatePath() . 'views/actors/list.php'; ?>">Actores</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo generatePath() . 'views/lenguages/list.php'; ?>">Idiomas</a>
+                    <a class="nav-link" href="<?php echo generatePath() . 'views/languages/list.php'; ?>">Idiomas</a>
                 </li>
             </ul>
         </div>

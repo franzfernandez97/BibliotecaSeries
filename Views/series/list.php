@@ -1,5 +1,5 @@
 <?php
-//Import libraries
+
 require_once "../../controllers/seriesController.php";
 require_once "../../controllers/platformsController.php";
 ?>
@@ -12,22 +12,22 @@ require_once "../../controllers/platformsController.php";
     <title>List a Series</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
 </head>
 <body>
-    <!-- Nav Bar-->  
-    <?php include '..\..\includes\navbar.php';?> 
+    <!-- Nav Bar-->
+    <?php include '..\..\includes\navbar.php';?>
 
     <div class="container text-center mt-5 content">
         <h1 class="display-3">Lista de Series</h1>
-    
+
         <!-- Link to create View -->
         <div class="row">
             <div class="col text-start">
                 <a class="btn btn-primary px-5" href="create.php">Crear</a>
-            </div> 
+            </div>
         </div>
-            
+
             <!-- Table series Data -->
             <div class="row mt-4">
                 <?php
@@ -49,7 +49,7 @@ require_once "../../controllers/platformsController.php";
                             <tr>
                                 <td><?php echo $series->getId ()?> </td>
                                 <td><?php echo $series->getTitle () ?> </td>
-                                <td><?php 
+                                <td><?php
                                 $platformObjt = getPlatformData((int)$series->getPlatformId());
                                 echo $platformObjt->getName() ?> </td>
                                 <td>
@@ -74,8 +74,8 @@ require_once "../../controllers/platformsController.php";
             </div>
     </div>
 
-    <!-- Footer-->  
-    <?php include '..\..\includes\footer.php';?> 
+    <!-- Footer-->
+    <?php include '..\..\includes\footer.php';?>
 
     <!-- Import the confirmDelete.js file -->
     <script src="..\..\includes\confirmDelete.js"></script>
