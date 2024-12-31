@@ -50,7 +50,7 @@
     public function setNationality(string $nationality): void {
       $this->nationality = $nationality;
     }
-    public function getAll():Array {
+    public function getAll():array {
       $mysqli = Database::getDbConnection();
       $query = "SELECT * FROM $this->table";
       $result = $mysqli->query($query);

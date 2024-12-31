@@ -1,1 +1,0 @@
-<h1>List all data LENGUAGES</h1>

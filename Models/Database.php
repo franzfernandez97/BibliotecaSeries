@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/config/config.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/config/Config.php';
 
 class Database{
     private $host;
@@ -19,7 +19,7 @@ class Database{
     public function connect() {
 
         $this->connection = new mysqli($this->host, $this->user, $this->password, $this->dbname);
-        
+
         if ($this->connection->connect_error) {
             return "Error: " . $this->connection->connect_error; // Return error message
         }
@@ -39,7 +39,7 @@ class Database{
         }
     }
 
-    
+
     public static function getDbConnection() {
         // Load the database credentials using the simplified Config class
         $credentials = Config::getDbCredentials();
@@ -52,8 +52,8 @@ class Database{
 
         // If connection fails, return the error message
         if (is_string($connection)) {
-            echo $connection;
-            exit; // Stop execution
+            return $connection;
+            //exit; // Stop execution
         }
 
         // Return the successful connection

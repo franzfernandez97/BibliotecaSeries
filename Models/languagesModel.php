@@ -1,110 +1,177 @@
 <?php
 require_once 'database.php';
 
-require_once '../config/config.php';
-
-class Lenguajes {
-    private $db;
+class Languages {
+    private $languageId;
+    private $languageName;
+    private $languageCode;
     private $table = 'languages';
 
-    public function __construct() {
-
-        // Load the database credentials using the simplified Config class
-        $credentials = Config::getDbCredentials();
-
-        // Create an instance of the Database class and connect to DB
-        $dbInstance = new Database($credentials['host'], $credentials['user'], $credentials['password'], $credentials['dbname']);
-        $connection = $dbInstance->connect();
-
-        // If connection fails (returns an error message), exit
-        if (is_string($connection)) {
-            echo $connection;
-            exit;
-        }
-
-        // Otherwise, set the connection
-        $this->db = $connection;
+    public function __construct($languageId = null, $languageName = null, $languageCode = null) {
+      $this->languageId = $languageId;
+      $this->languageName = $languageName;
+      $this->languageCode = $languageCode;
     }
-
-    // CREATE: Add a new languages (only name)
-    public function create($name) {
-        $query = "INSERT INTO $this->table (name) VALUES (?)";
-
-        if ($stmt = $this->db->prepare($query)) {
-            $stmt->bind_param("s", $name);
-            if ($stmt->execute()) {
-                echo "New languages {".$name."}added successfully.\n";
-            } else {
-                echo "Error: " . $stmt->error . "\n";
-            }
-            $stmt->close();
-        }
+    //GETTERS
+    public function getLanguageId():int {
+      return (int)$this->languageId;
     }
-
-    // READ: Get all languages
-    public function getAll() {
-        $query = "SELECT * FROM $this->table";
-        $result = $this->db->query($query);
-
-        if ($result->num_rows > 0) {
-            $languages = [];
-            while ($row = $result->fetch_assoc()) {
-                $languages[] = $row;
-            }
-            return $languages;
-        } else {
-            echo "No languages found.\n";
-            return [];
-        }
+    public function getLanguageName():string {
+      return (string)$this->languageName;
     }
-
-    // READ: Get a specific languages by ID
-    public function getById($id) {
-        $query = "SELECT * FROM $this->table WHERE id = ?";
-        if ($stmt = $this->db->prepare($query)) {
-            $stmt->bind_param("i", $id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            if ($result->num_rows > 0) {
-                return $result->fetch_assoc();
-            } else {
-                echo "languages not found.\n";
-                return null;
-            }
-
-            $stmt->close();
-        }
+    public function getLanguageCode():string {
+      return (string)$this->languageCode;
     }
-
-    // UPDATE: Update an existing languages by ID
-    public function update($id, $name) {
-        $query = "UPDATE $this->table SET name = ? WHERE id = ?";
-
-        if ($stmt = $this->db->prepare($query)) {
-            $stmt->bind_param("si", $name, $id);
-            if ($stmt->execute()) {
-                echo "languages updated successfully.\n";
-            } else {
-                echo "Error: " . $stmt->error . "\n";
-            }
-            $stmt->close();
-        }
+    //SETTERS
+    public function setLanguageId(int $languageId): void {
+      $this->languageId = $languageId;
     }
-
-    // DELETE: Delete a languages by ID
-    public function delete($id) {
-        $query = "DELETE FROM $this->table WHERE id = ?";
-
-        if ($stmt = $this->db->prepare($query)) {
-            $stmt->bind_param("i", $id);
-            if ($stmt->execute()) {
-                echo "languages deleted successfully.\n";
-            } else {
-                echo "Error: " . $stmt->error . "\n";
-            }
-            $stmt->close();
+    public function setLanguageName(string $languageName): void {
+      $this->languageName = $languageName;
+    }
+    public function setLanguageCode(string $languageCode):void {
+      $this->languageCode = $languageCode;
+    }
+    public function getAllLanguages(): array{
+      $mysqli = Database::getDbConnection();
+      // Get the error message from the database connection
+      if(is_string($mysqli)){
+        throw new Exception("Error al conectar con la base de datos: ". $mysqli);
+      }
+      $query = "SELECT * FROM $this->table";
+      // Get the error message from the query
+      try {
+        $result = $mysqli->query(query: $query);
+      }catch (Exception $error) {
+        throw new Exception("Error al tratar de hacer la consulta: " . $error->getMessage());
+      }
+      $languages = [];
+      if ($result->num_rows > 0) {
+        foreach ($result as $result_array) {
+          $itemObject = new Languages(languageId: $result_array['id'], languageName: $result_array['name'], languageCode: $result_array['isocode']);
+          array_push($languages, $itemObject);
         }
+      }
+      $mysqli->close();
+      return $languages;
+    }
+    public function getById()  {
+      $mysqli = Database::getDbConnection();
+      if(is_string($mysqli)){
+        throw new Exception("Error al conectar con la base de datos: " . $mysqli);
+      }
+      $query = 'SELECT * FROM languages WHERE id = ?';
+      try {
+        $stmt = $mysqli->prepare($query);
+        $stmt->bind_param('i', $this->languageId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+      }catch (Exception $error) {
+        throw new Exception("Error al tratar de hacer la consulta: " . $error->getMessage());
+      }
+      if ($result->num_rows > 0 ){
+        foreach ($result as $result_array) {
+          $itemObject = new Languages(languageId: $result_array['id'], languageName: $result_array['name'], languageCode: $result_array['isocode']);
+          $stmt->close();
+          $mysqli->close();
+          return $itemObject;
+        }
+      }
+      $stmt->close();
+      $mysqli->close();
+      return false;
+    }
+    public function createLanguage(): bool {
+      $mysqli = Database::getDbConnection();
+      if(is_string($mysqli)){
+        throw new Exception("Error al conectar con la base de datos: " . $mysqli);
+      }
+      $query = "INSERT INTO $this->table (name, isocode) VALUES (?, ?)";
+      try {
+        $resultQuery =$this->getByCode();
+        if ($resultQuery){
+          throw new Exception("El idioma ya existe");
+        }
+    } catch (Exception $error) {
+        throw new Exception("" . $error->getMessage());
+
+    }
+      // if ($repeat) {
+      //   throw new Exception("¡El idioma ya existe!");
+      // }
+      try {
+        $stmt = $mysqli->prepare($query);
+        $stmt->bind_param("ss", $this->languageId, $this->languageCode);
+        $stmt->execute();
+        $result = $stmt->get_result();
+      }catch (Exception $error) {
+        throw new Exception("Error al tratar de crear el idioma: " . $error->getMessage());
+      }
+      $stmt->close();
+      $mysqli->close();
+      return $result ? true : false;
+    }
+    public function editlanguage(){
+      $mysqli = Database::getDbConnection();
+      if (is_string($mysqli)) {
+        throw new Exception("Error al conectar con la base de datos: " . $mysqli);
+      }
+      $query = "UPDATE $this->table SET name = ?, isocode = ? WHERE id = ?";
+      try {
+        $stmt = $mysqli->prepare($query);
+        $stmt->bind_param("ssi", $this->languageName, $this->languageCode, $this->languageId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+      }catch(Exception $error) {
+        throw new Exception("Error al editar el idioma: ". $error->getMessage());
+      }
+      $stmt->close();
+      $mysqli->close();
+      return $result ? true : false;
+    }
+    public function deletelanguage(){
+      $mysqli = Database::getDbConnection();
+      if (is_string($mysqli)) {
+        throw new Exception("Error al conectar con la base de datos: " . $mysqli);
+      }
+      $query = "DELETE FROM $this->table WHERE id = ?";
+      try {
+        $stmt = $mysqli->prepare($query);
+        $stmt->bind_param("i", $this->languageId);
+        $result = $stmt->execute();
+        $stmt->close();
+        $mysqli->close();
+        return $result ? true : false;
+      }catch(Exception $error) {
+        throw new Exception("Error al borrar el idioma: ". $error->getMessage());
+      }
+
+    }
+    public function getByCode() {
+      $mysqli = Database::getDbConnection();
+      if (is_string($mysqli)) {
+          throw new Exception("Error al conectar con la base de datos: " . $mysqli);
+      }
+
+      // Preparar la consulta para verificar si el idioma existe
+      $query = "SELECT * FROM $this->table WHERE LOWER(isocode) = LOWER(?)";
+      try {
+          $stmt = $mysqli->prepare($query);
+          $stmt->bind_param('s', $this->languageCode);
+          $stmt->execute();
+          $result = $stmt->get_result();
+
+          if ($result->num_rows > 0) {
+              $stmt->close();
+              $mysqli->close();
+              return true;
+          }
+          $stmt->close();
+          $mysqli->close();
+          return false;
+      } catch (Exception $error) {
+          throw new Exception("Error al tratar de hacer la consulta: " . $error->getMessage());
+      }
     }
 }
 
