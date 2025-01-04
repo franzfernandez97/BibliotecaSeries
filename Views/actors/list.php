@@ -63,7 +63,7 @@
                     <input type="hidden" name="actorId" value="<?= $actor->getActorId() ?>">
                     <button type="submit" class="btn btn-danger">Borrar</button>
                   </form>
-                  <a class="btn btn-primary" href="actorInformation.php?id=<?= $actor->getActorId() ?>">Ver</a>
+                  <a class="btn btn-primary" href="directorInformation.php?id=<?= $actor->getActorId() ?>">Ver</a>
                 </div>
               </td>
             </tr>

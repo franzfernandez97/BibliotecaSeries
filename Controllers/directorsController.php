@@ -1,5 +1,5 @@
 <?php
-require_once '../../Models/directorsModel.php';
+  require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/models/directorsModel.php';
 
 function listDirectors(){
     //check no arguments were used
