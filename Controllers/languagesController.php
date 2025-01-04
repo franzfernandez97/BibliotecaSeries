@@ -10,7 +10,7 @@
     try {
       $languages = $model->getAllLanguages();
     }catch (Exception $error) {
-      return $error->getMessage();
+      throw new Exception($error->getMessage());
     }
     return $languages;
   }

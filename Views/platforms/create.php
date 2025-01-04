@@ -1,6 +1,6 @@
 <?php
 //Import libraries
-require_once "../../controllers/platformsController.php";
+require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/platformsController.php';
 
 ?>
 
@@ -16,7 +16,7 @@ require_once "../../controllers/platformsController.php";
 </head>
 <body>
     <!-- Nav Bar-->  
-    <?php include '..\..\includes\navbar.php';?> 
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/navbar.php';?> 
     
     <!-- Main Info-->  
     <div class="container text-center mt-5 content">
@@ -38,7 +38,22 @@ require_once "../../controllers/platformsController.php";
             //Check if POST variable platformName was assigned to create a platform
             
             if (isset($_POST["platformName"])){
-                $platformCreated = createPlatform($_POST["platformName"]);
+                try{
+                    $platformCreated = createPlatform($_POST["platformName"]);
+                  } catch (Exception $error){
+                    $platformCreated = $error->getMessage();
+                  }
+            ?>    
+                  <!-- Capture Error -->
+                  <?php if(is_string($platformCreated)): ?>
+                        <div class='alert alert-danger' role='alert'>
+                          <p><?= $platformCreated ?></p>
+                          <?php die; ?>
+                        </div>
+                  <?php endif; ?>
+                  <!-- ############# -->
+            <?php
+                
             }  
         }
 
@@ -88,6 +103,6 @@ require_once "../../controllers/platformsController.php";
         }
     ?>
 
-     <!-- Footer-->  
-     <?php include '..\..\includes\footer.php';?> 
+<!-- Footer-->  
+<?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/footer.php';?> 
 </body>
