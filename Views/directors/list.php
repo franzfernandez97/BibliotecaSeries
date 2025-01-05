@@ -1,6 +1,6 @@
 <?php
 
-require_once "../../controllers/directorsController.php";
+  require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/directorsController.php';
 
 ?>
 
@@ -55,12 +55,13 @@ require_once "../../controllers/directorsController.php";
                                 <td><?php echo $director->getbirthDate()?> </td>
                                 <td><?php echo $director->getNationality()?> </td>
                                 <td>
-                                    <div class="btn-group" role="group" aria-label="Acciones">
+                                    <div class="d-flex justify-content-center gap-2" role="group" aria-label="Acciones">
                                         <a class= "btn btn-success" href="edit.php?id=<?php echo $director->getDirectorId(); ?>">Editar</a>
                                         <form name="delete_form" action="delete.php" method="POST" style="display:inline;">
                                             <input type="hidden" name="directorId" value="<?php echo $director->getDirectorId()?>">
                                             <button type="submit" class="btn btn-danger">Borrar</button>
                                         </form>
+                                        <a class="btn btn-primary" href="directorInformation.php?id=<?= $director->getDirectorId() ?>">Ver</a>
                                     </div>
                                 </td>
                             </tr>

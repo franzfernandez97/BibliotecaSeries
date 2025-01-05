@@ -127,9 +127,9 @@
       $mysqli->close();
 
       return $platformUpdated;
-  }
+    }
 
-  public function delete(){
+    public function delete(){
     $deleted = false;
     $mysqli = Database::getDbConnection();
 
@@ -149,7 +149,7 @@
     $mysqli->close();
 
     return $deleted;
-  }
+    }
 
   }
 ?>
