@@ -1,10 +1,9 @@
 <?php
 //Import libraries
 
-use function PHPSTORM_META\type;
+require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/seriesController.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/platformsController.php';
 
-require_once "../../controllers/seriesController.php";
-require_once "../../controllers/platformsController.php";
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +18,7 @@ require_once "../../controllers/platformsController.php";
 </head>
 <body>
     <!-- Nav Bar-->  
-    <?php include '..\..\includes\navbar.php';?> 
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/navbar.php';?> 
     
     <!-- Main Info-->  
     <div class="container text-center mt-5 content">
@@ -43,9 +42,24 @@ require_once "../../controllers/platformsController.php";
 
             if (isset($_POST["serieTitle"]) && isset($_POST['platform'])){
                 $serieTitle = $_POST["serieTitle"];
+
+                try{
                 $serieCreated = createSerie($serieTitle,(int)$_POST['platform']);
-   
-            }  
+                } catch (Exception $error){
+                    $serieCreated = $error->getMessage();
+                }
+            ?>    
+                <!-- Capture Error -->
+                <?php if(is_string($serieCreated)): ?>
+                        <div class='alert alert-danger' role='alert'>
+                        <p><?= $serieCreated ?></p>
+                        <?php die; ?>
+                        </div>
+                <?php endif; ?>
+                <!-- ############# -->
+            <?php
+    
+                }  
         }
 
         //If is the first time a user enter then $sendData is False
@@ -69,8 +83,22 @@ require_once "../../controllers/platformsController.php";
                         <label for="platform" class="form-label"></label>
                         <select id="platform" name="platform" class="form-select" required>
                             <option value="" disabled selected>Seleccione una plataforma</option>
-                            <?php 
+                            <?php
+                            try{
                             $plataformList = listPlatforms();
+                            } catch (Exception $error){
+                                $plataformList = $error->getMessage();
+                            }
+                        ?>    
+                            <!-- Capture Error -->
+                            <?php if(is_string($plataformList)): ?>
+                                    <div class='alert alert-danger' role='alert'>
+                                    <p><?= $plataformList ?></p>
+                                    <?php die; ?>
+                                    </div>
+                            <?php endif; ?>
+                            <!-- ############# -->
+                        <?php
                             foreach ($plataformList as $platform) {
                             echo "<option value='".$platform->getId()."'>".$platform->getName()."</option>";
                             }
@@ -108,5 +136,5 @@ require_once "../../controllers/platformsController.php";
     ?>
 
      <!-- Footer-->  
-     <?php include '..\..\includes\footer.php';?> 
+     <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/footer.php'?> 
 </body>

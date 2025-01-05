@@ -1,7 +1,7 @@
 <?php
 //Import libraries
-require_once "../../controllers/seriesController.php";
-require_once "../../controllers/platformsController.php";
+require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/seriesController.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/platformsController.php';
 ?>
 
 <!DOCTYPE html>
@@ -16,14 +16,30 @@ require_once "../../controllers/platformsController.php";
 </head>
 <body>
     <!-- Nav Bar-->  
-    <?php include '..\..\includes\navbar.php';?> 
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/navbar.php';?> 
     
     <!-- Main Info-->  
     <div class="container text-center mt-5 content">
         <h1 class="display-3">Editar Series </h1>
         <?php 
             $idSerie = $_GET['id'];
-            $serieObject = getSerieData((int)$idSerie);
+            try{
+                $serieObject = getSerieData((int)$idSerie);
+            } catch (Exception $error){
+                $serieObject = $error->getMessage();
+            }
+        ?>
+
+        <!-- Capture Error -->
+        <?php if(is_string($serieObject)): ?>
+                <div class='alert alert-danger' role='alert'>
+                <p><?= $serieObject ?></p>
+                <?php die; ?>
+                </div>
+        <?php endif; ?>
+        <!-- ############# -->
+
+        <?php
             $sendData = false;
             $serieEdited = false;
 
@@ -33,7 +49,22 @@ require_once "../../controllers/platformsController.php";
 
             if (isset($sendData)){
                 if (isset($_POST["serieTitle"]) && isset($_POST['platform'])){
+                    try{
                     $serieEdited = updateSerie((int)$_POST["serieId"], $_POST["serieTitle"], (int)$_POST['platform']);
+                    } catch (Exception $error){
+                        $serieEdited = $error->getMessage();
+                    }
+                ?>
+        
+                <!-- Capture Error -->
+                <?php if(is_string($serieEdited)): ?>
+                        <div class='alert alert-danger' role='alert'>
+                        <p><?= $serieEdited ?></p>
+                        <?php die; ?>
+                        </div>
+                <?php endif; ?>
+                <!-- ############# -->
+                <?php
                 }  
             }
 
@@ -57,8 +88,23 @@ require_once "../../controllers/platformsController.php";
                         <label for="platform" class="form-label"></label>
                         <select id="platform" name="platform" class="form-select" required>
                             <option value="" disabled selected>Seleccione una plataforma</option>
-                            <?php 
-                            $plataformList = listPlatforms();
+                            <?php
+                            try {
+                                $plataformList = listPlatforms();
+                            } catch (Exception $error){
+                                $plataformList = $error->getMessage();
+                            }
+                            ?>
+                            <!-- Capture Error -->
+                            <?php if(is_string($plataformList)): ?>
+                                    <div class='alert alert-danger' role='alert'>
+                                    <p><?= $plataformList ?></p>
+                                    <?php die; ?>
+                                    </div>
+                            <?php endif; ?>
+                            <!-- ############# -->
+
+                            <?php
                             foreach ($plataformList as $platform) {
                                 if ($platform->getId() == $serieObject->getplatformid()){
                                     echo "<option value='".$platform->getId()."' selected>".$platform->getName()."</option>";
@@ -98,5 +144,5 @@ require_once "../../controllers/platformsController.php";
         }
     ?>
      <!-- Footer-->  
-     <?php include '..\..\includes\footer.php'?> 
+     <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/footer.php'?> 
 </body>

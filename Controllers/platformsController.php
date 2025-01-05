@@ -1,7 +1,7 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/models/platformsModel.php';
 
-function validacionTexto($input) {
+function validacionTextoPlataforma($input) {
     return preg_match('/^(?!\s)[\p{L}]+(?:[\p{L}\s+-]+)*$/u', $input);
 }
 function listPlatforms(): array|string {
@@ -26,7 +26,7 @@ function createPlatform (string $namePlatform){
     }
 
     // the argument is string or has spaces?
-    if (!is_string($namePlatform) || !validacionTexto($namePlatform))  {
+    if (!is_string($namePlatform) || !validacionTextoPlataforma($namePlatform))  {
         throw new InvalidArgumentException("Error funcion createPlatform: parametro namePlatform debe ser una cadena (string).");
     }
     $newPlatform = new Platform(null, $namePlatform);
@@ -50,7 +50,7 @@ function updatePlatform ($idPlatform, $namePlatform){
     }
 
     // is $namePlatform a string?
-    if (!is_string($namePlatform) || !validacionTexto($namePlatform)) {
+    if (!is_string($namePlatform) || !validacionTextoPlataforma($namePlatform)) {
         throw new InvalidArgumentException("Error funcion updatePlatform: parametro 'namePlatform' debe ser una cadena (string).");
     }
     

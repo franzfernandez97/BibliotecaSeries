@@ -1,0 +1,171 @@
+<?php
+require_once 'database.php';
+require_once 'actorsModel.php';
+require_once 'seriesModel.php';
+require_once 'platformsModel.php';
+require_once 'directorsModel.php';
+require_once 'languagesModel.php';
+
+class SeriesInformation {
+    private $actorId;
+    private $serieId;
+    private $directorId;
+    private $platformId;
+    private $lenguajeId;
+
+    public function __construct($seriesId=null,$actorId=null, $platformId=null, $directorId=null,$lenguajeId=null) {
+      $this->serieId = $seriesId;
+      $this->platformId = $platformId;
+      $this->actorId = $actorId;
+      $this->directorId = $directorId;
+      $this->lenguajeId = $lenguajeId;
+    }
+
+    //Getters
+    public function getSerieId():int {
+        return $this->serieId;
+    }
+
+    public function getPlatformId():int{
+      return $this->platformId;
+    }
+
+    public function getActorsId():int{
+        return $this->actorId;
+    }
+
+    public function getDirectorId():int{
+        return $this->directorId;
+    }
+
+    public function getLenguageId():int{
+        return $this->lenguajeId;
+    }
+
+
+    public function getActorsBySerie(): array {
+        $mysqli = Database::getDbConnection();
+        $query = 'SELECT
+                      a.id AS id,
+                      a.firstname AS firstname,
+                      a.lastname AS lastname,
+                      a.birthdate AS birthdate,
+                      a.nationality AS nationality
+                  FROM
+                      series_actors
+                  LEFT JOIN actors AS a
+                      ON series_actors.idactor = a.id
+                  WHERE
+                      series_actors.idserie = ?';
+        $stmt = $mysqli->prepare($query);
+        $stmt->bind_param("i", $this->serieId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $actors = [];
+        if ($result->num_rows > 0) {
+          foreach ($result as $item){
+            $itemObject = new Actors(actorId: $item['id'], firstName: $item['firstname'], lastName: $item['lastname'], birthDate: $item['birthdate'], nationality: $item['nationality']);
+            array_push($actors, $itemObject);
+          }
+        }
+        $mysqli->close();
+        return $actors;
+      }
+
+      
+
+      public function getDirectorBySerie(): array {
+        $mysqli = Database::getDbConnection();
+        $query = 'SELECT
+                    d.id AS id,
+                    d.firstname AS firstname,
+                    d.lastname AS lastname,
+                    d.birthdate AS birthdate,
+                    d.nationality AS nationality
+                    FROM
+                      series_directors as sd
+                    LEFT JOIN directors as d
+                      ON sd.iddirector = d.id
+                    WHERE
+                      sd.idserie = ?';
+        $stmt = $mysqli->prepare($query);
+        $stmt->bind_param("i", $this->serieId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+
+        $directors = [];
+        if ($result->num_rows > 0) {
+          foreach ($result as $item){
+            $itemObject = new Directors($item['id'], $item['firstname'], $item['lastname'], $item['birthdate'], $item['nationality']);
+            array_push($directors, $itemObject);
+          }
+        }
+        $mysqli->close();
+        return $directors;
+      }
+
+      public function getPlatformBySerie(): array {
+        $mysqli = Database::getDbConnection();
+        $query = 'SELECT
+                      p.id AS id,
+                      p.name AS "name"
+                  FROM
+                      platforms AS p
+                  LEFT JOIN series AS s
+                      ON s.platformid = p.id
+                  WHERE
+                      s.platformid = ?';
+        $stmt = $mysqli->prepare($query);
+        $stmt->bind_param("i", $this->serieId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+
+        $platform = [];
+        if ($result->num_rows > 0) {
+          foreach ($result as $item){
+            $itemObject = new Platform($item['id'], $item['name']);
+            array_push($platform, $itemObject);
+          }
+        }
+        $mysqli->close();
+        return $platform;
+      }
+
+      public function getLanguagesBySerie() {
+        $mysqli = Database::getDbConnection();
+        $query = 'SELECT
+                    l.id AS id,
+                    l.name AS "name",
+                    l.isocode AS isocode,
+                    ls.languagestype AS "type"
+                    FROM
+                      languages_series as ls
+                    LEFT JOIN languages as l
+                      ON ls.idlanguage = l.id
+                    WHERE
+                      ls.idserie = ?';
+        $stmt = $mysqli->prepare($query);
+        $stmt->bind_param("i", $this->serieId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+
+        $languajes = [];
+        if ($result->num_rows > 0) {
+          foreach ($result as $item){
+            $itemObject = [
+              "language"=> new Languages($item['id'], $item['name'], $item['isocode']),
+              "type"=> $item['type']
+            ];
+            array_push($languajes, $itemObject);
+          }
+        }
+        $mysqli->close();
+        return $languajes;
+      }
+
+}
+    
+?>

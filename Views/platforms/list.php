@@ -32,7 +32,7 @@ try{
             </div> 
         </div>
             
-        <!-- Capture Error -->
+    <!-- Capture Error -->
     <?php if(is_string($plataformList)): ?>
           <div class='alert alert-danger' role='alert'>
             <p><?= $plataformList ?></p>
