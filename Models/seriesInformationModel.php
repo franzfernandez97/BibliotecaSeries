@@ -2,7 +2,6 @@
 require_once 'database.php';
 require_once 'actorsModel.php';
 require_once 'seriesModel.php';
-require_once 'platformsModel.php';
 require_once 'directorsModel.php';
 require_once 'languagesModel.php';
 
@@ -10,12 +9,10 @@ class SeriesInformation {
     private $actorId;
     private $serieId;
     private $directorId;
-    private $platformId;
     private $lenguajeId;
 
-    public function __construct($seriesId=null,$actorId=null, $platformId=null, $directorId=null,$lenguajeId=null) {
+    public function __construct($seriesId=null,$actorId=null, $directorId=null,$lenguajeId=null) {
       $this->serieId = $seriesId;
-      $this->platformId = $platformId;
       $this->actorId = $actorId;
       $this->directorId = $directorId;
       $this->lenguajeId = $lenguajeId;
@@ -24,10 +21,6 @@ class SeriesInformation {
     //Getters
     public function getSerieId():int {
         return $this->serieId;
-    }
-
-    public function getPlatformId():int{
-      return $this->platformId;
     }
 
     public function getActorsId():int{
@@ -103,34 +96,6 @@ class SeriesInformation {
         }
         $mysqli->close();
         return $directors;
-      }
-
-      public function getPlatformBySerie(): array {
-        $mysqli = Database::getDbConnection();
-        $query = 'SELECT
-                      p.id AS id,
-                      p.name AS "name"
-                  FROM
-                      platforms AS p
-                  LEFT JOIN series AS s
-                      ON s.platformid = p.id
-                  WHERE
-                      s.platformid = ?';
-        $stmt = $mysqli->prepare($query);
-        $stmt->bind_param("i", $this->serieId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-
-        $platform = [];
-        if ($result->num_rows > 0) {
-          foreach ($result as $item){
-            $itemObject = new Platform($item['id'], $item['name']);
-            array_push($platform, $itemObject);
-          }
-        }
-        $mysqli->close();
-        return $platform;
       }
 
       public function getLanguagesBySerie() {

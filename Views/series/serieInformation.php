@@ -1,12 +1,13 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/seriesInformationController.php';
 require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/seriesController.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/platformsController.php';
 
 $serieId = (int)$_GET['id'];
 
 $serieInformation = getSerieData($serieId);
 
-$platformList = listPlatformBySerie($serieId);
+$platformObjt = getPlatformData((int)$serieInformation->getPlatformId());
 
 $actorsList = listActorsBySerie($serieId);
 
@@ -39,11 +40,8 @@ $lenguageDict = listLanguagesBySerie($serieId);
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th class="text-center fw-bold align-middle" rowspan="3" style="width: 20%;">Plataformas</th>
-                    <?php 
-                    foreach ($platformList as $platform): 
-                    ?>    
-                    <td><?= $platform->getName(); break; endforeach;?></td>
+                    <th class="text-center fw-bold align-middle" rowspan="3" style="width: 20%;">Plataformas</th>  
+                    <td><?php echo $platformObjt->getName()?></td>
                 </tr>
             </thead>
         </table>

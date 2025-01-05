@@ -2,14 +2,6 @@
   require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/models/seriesInformationModel.php';
 
   
-  function listPlatformBySerie($serieId):array{
-    $model = new SeriesInformation(seriesId: $serieId);
-    $platformList = $model->getPlatformBySerie();
-    return $platformList;
-
-  }
-
-
   function listActorsBySerie($serieId):array {
     $model = new SeriesInformation(seriesId: $serieId);
     $actorsList = $model->getActorsBySerie();
