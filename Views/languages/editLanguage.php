@@ -1,8 +1,24 @@
 <?php
   require_once $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/Controllers/languagesController.php';
+  require_once $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/Controllers/languageSeriesController.php';
+  require_once $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/Controllers/seriesController.php';
 
   $languageId = (int)$_GET['id'];
   $language = getLanguage(languageId: $languageId);
+  $series = listSeries();
+  $languageSeries = getSeriesByLanguage(languageId: $languageId);
+  $seriesSelected = [];
+  $languageType =[];
+  $languageTypeArray = [
+    'audio'=>'Audio',
+    'subtitle'=>'Subtitulos'
+  ];
+  foreach ($languageSeries as $serieArray) {
+    $serie = $serieArray['serie'];
+    $type = $serieArray['languageType'];
+    array_push($seriesSelected, $serie->getId());
+    array_push($languageType, $type->getLanguageType());
+  }
 
 ?>
 
@@ -39,7 +55,11 @@
         if (isset($sendData)){
             //Check if POST variable platformName was assigned to create a platform
           if (isset($_POST["languageName"]) && isset($_POST["languageCode"])){
-              $languageEdited = editLanguage(languageId: $languageId,languageName: $_POST['languageName'], languageCode: $_POST['languageCode']);
+            $languageEdited = editLanguage(languageId: $languageId,languageName: $_POST['languageName'], languageCode: $_POST['languageCode']);
+          }
+
+          if (isset($_POST['series']) && isset($_POST['languagesType'])){
+            updateRelationship($languageId, $_POST['series'], $_POST['languagesType']);
           }
 
         }
@@ -61,6 +81,41 @@
                     <div class="mb-3 d-flex flex-column align-items-start">
                         <label for="languageCode" class="form-label">Código ISO</label>
                         <input id="languageCode" name="languageCode" type="text" class="form-control" placeholder="Ingrese un código" value="<?= $language->getLanguageCode() ?>" required>
+                    </div>
+                    <h2>Series asociadas</h2>
+                    <div class="mb-3 d-flex flex-column align-items-start">
+                      <label for="series" class="form-label">Series</label>
+                      <select id="series" name="series[]" class="w-100 checkbox-list" multiple aria-label="multiple select example">
+                        <option value="<?=(int)0?>"> --Seleccione una opción-- </option>
+                        <?php foreach ($series as $serie): ?>
+                            <?php if(in_array($serie->getId(), $seriesSelected)): ?>
+                            <option value="<?= (int)$serie->getId() ?>"selected>
+                              <?= $serie->getTitle() ?>
+                            </option>
+                            <?php else: ?>
+                              <option value="<?= (int)$serie->getId() ?>">
+                                <?= $serie->getTitle() ?>
+                              </option>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                      </select>
+                    </div>
+                    <div class="mb-3 d-flex flex-column align-items-start">
+                      <label for="languagesType" class="form-label">Disponibilidad</label>
+                      <select id="languages Type" name="languagesType[]" class="w-100 checkbox-list" multiple aria-label="multiple select example">
+                        <option value=""> --Seleccione una opción-- </option>
+                        <?php foreach ($languageTypeArray as $key => $value): ?>
+                          <?php if(in_array($key, $languageType)): ?>
+                              <option value="<?= $key ?>" selected>
+                                <?= $value ?>
+                              </option>
+                              <?php else: ?>
+                                <option value="<?= $key ?>">
+                                  <?= $value ?>
+                                </option>
+                          <?php endif; ?>
+                        <?php endforeach; ?>
+                      </select>
                     </div>
                     <!-- Submit button inside the form -->
                     <input type="submit" value="Crear" class="btn btn-primary" name="editButton">

@@ -3,7 +3,8 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/actorSerie
 require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/actorsController.php';
 
 $actorId = (int)$_GET['id'];
-$actorInformation = getActor($actorId, true);$seriesList = listSeriesByActor($actorId);
+$actorInformation = getActor($actorId, true);
+$seriesList = listSeriesByActor($actorId);
 ?>
 
 <!DOCTYPE html>
@@ -22,19 +23,27 @@ $actorInformation = getActor($actorId, true);$seriesList = listSeriesByActor($ac
         <h1 class="mb-5 mt-5">
           Información <?= $actorInformation->getFirstName().' '.$actorInformation->getLastName() ?>
         </h1>
-        <section class="d-flex flex-column justify-content-start w-100">
-          <p>
-            <strong>Nombre: </strong> <span><?= $actorInformation->getFirstName() ?></span>
-          </p>
-          <p>
-          <strong>Apellidos: </strong> <span><?= $actorInformation->getLastName() ?></span>
-          </p>
-          <p>
-          <strong>Fecha de nacimiento: </strong> <span><?= $actorInformation->getBirthDate() ?></span>
-          </p>
-          <p>
-          <strong>Nacionalidad: </strong> <span><?= $actorInformation->getNationality() ?></span>
-          </p>
+        <section class="d-flex flex-column justify-content-start w-100 mb-5">
+          <table class="table">
+            <tbody>
+              <tr>
+                <td>Nombre</td>
+                <td><?= $actorInformation->getFirstName() ?></td>
+              </tr>
+              <tr>
+                <td>Apellidos</td>
+                <td><?= $actorInformation->getLastName() ?></td>
+              </tr>
+              <tr>
+                <td>Fecha de nacimiento</td>
+                <td><?= $actorInformation->getBirthDate() ?></td>
+              </tr>
+              <tr>
+                <td>Nacionalidad</td>
+                <td><?= $actorInformation->getNationality() ?></td>
+              </tr>
+            </tbody>
+          </table>
         </section>
       </div>
       <section class="w-100 justify-content-center mb-10">
