@@ -143,7 +143,7 @@
       return $result ? true : false;
   }
 
-  public function delete(){
+    public function delete(){
     $deleted = false;
     $mysqli = Database::getDbConnection();
     if(is_string($mysqli)){

@@ -1,6 +1,6 @@
 <?php
 //Import libraries
-require_once "../../controllers/seriesController.php";
+require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/seriesController.php';
 
 ?>
 
@@ -15,8 +15,8 @@ require_once "../../controllers/seriesController.php";
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Nav Bar-->  
-    <?php include '..\..\includes\navbar.php';?> 
+   <!-- Nav Bar-->  
+   <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/navbar.php';?> 
     
     <!-- Main Info-->  
     <div class="container text-center mt-5 content">
@@ -25,7 +25,22 @@ require_once "../../controllers/seriesController.php";
 
     //main variables
     $idSerie = $_POST['seriesId'];
-    $serieDeleted = deleteSerie ((int)$idSerie);
+    try{
+        $serieDeleted = deleteSerie ((int)$idSerie);
+    } catch (Exception $error){
+        $serieDeleted = $error->getMessage();
+    }
+    ?>
+
+    <!-- Capture Error -->
+    <?php if(is_string($serieDeleted)): ?>
+          <div class='alert alert-danger' role='alert'>
+            <p><?= $serieDeleted ?></p>
+            <?php die; ?>
+          </div>
+    <?php endif; ?>
+    <!-- ############# -->
+    <?php
 
     //Checkl the delete Result
     if($serieDeleted){
@@ -43,3 +58,7 @@ require_once "../../controllers/seriesController.php";
     <?php
     }
     ?>
+    <!-- Footer-->  
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/footer.php';?> 
+
+</body>

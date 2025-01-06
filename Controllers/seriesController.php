@@ -1,13 +1,19 @@
 <?php
 require_once "../../models/seriesModel.php";
-
-function listSeries(){
+function validacionTextoSerie($input) {
+    return preg_match('/^(?!\s)[\p{L}]+(?:[\p{L}\s+-]+)*$/u', $input);
+}
+function listSeries(): array|string{
     //check no arguments were used
     if (func_num_args()> 0){
         throw new InvalidArgumentException( "Error función listSeries: no acepta parametros");
     }
-    $model = new Series(null, null, null);
-    $seriesList = $model->getAll();
+    $model = new Series();
+    try{
+        $seriesList = $model->getAll();
+    }catch (Exception $error) {
+        throw new Exception($error->getMessage());
+    }
     return $seriesList;
 }
 
@@ -18,7 +24,7 @@ function createSerie ($titleSerie,$idSerie){
     }
 
     // the argument is not string?
-    if (!is_string($titleSerie)) {
+    if (!is_string($titleSerie) || !validacionTextoSerie($titleSerie)) {
         throw new InvalidArgumentException("Error funcion createSerie: parametro titleSerie debe ser una cadena (string).");
     }
 
@@ -28,7 +34,11 @@ function createSerie ($titleSerie,$idSerie){
     }
 
     $newSerie = new Series(null, $titleSerie,$idSerie);
-    $isCreated = $newSerie->create();
+    try{
+        $isCreated = $newSerie->create();
+    }catch (Exception $error) {
+        throw new Exception($error->getMessage());
+    }
     return $isCreated ;
 }
 
@@ -49,12 +59,16 @@ function updateSerie ($idSerie, $titleSerie, $idPlatform){
     }
 
     // is $titleSerie a string?
-    if (!is_string($titleSerie)) {
+    if (!is_string($titleSerie) || !validacionTextoSerie($titleSerie)) {
         throw new InvalidArgumentException("Error funcion updateSerie: parametro 'namePlatform' debe ser una cadena (string).");
     }
     $model = new Series($idSerie, $titleSerie, $idPlatform);
-    $isEdited = $model->update();
-    return $isEdited ;
+    try{
+        $isEdited = $model->update();
+    }catch (Exception $error) {
+        throw new Exception($error->getMessage());
+    }
+        return $isEdited ;
 }
 
 function getSerieData($idSerie){
@@ -68,7 +82,11 @@ function getSerieData($idSerie){
         throw new InvalidArgumentException("Error funcion getPlatformData: parametro 'idPlatform' debe ser un número entero (int).");
     }
     $platform = new Series($idSerie,null, null);
-    $platformObject = $platform->getItem();
+    try{
+        $platformObject = $platform->getItem();
+    }catch (Exception $error) {
+        throw new Exception($error->getMessage());
+    }
     return $platformObject; 
 }
 
@@ -83,7 +101,11 @@ function deleteSerie ($idSerie){
         throw new InvalidArgumentException("Error funcion deletePlatform: parametro 'idSerie' debe ser un número entero (int).");
     }
     $platform = new Series($idSerie,null,null);
-    $platformDeleted = $platform->delete();
-    return $platformDeleted;
+    try{
+        $platformDeleted = $platform->delete();
+    }catch (Exception $error) {
+        throw new Exception($error->getMessage());
+    }
+        return $platformDeleted;
 }
 ?>

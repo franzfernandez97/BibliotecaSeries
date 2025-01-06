@@ -1,6 +1,6 @@
 <?php
 //Import libraries
-require_once "../../controllers/platformsController.php";
+require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/platformsController.php';
 
 ?>
 
@@ -16,7 +16,7 @@ require_once "../../controllers/platformsController.php";
 </head>
 <body>
     <!-- Nav Bar-->  
-    <?php include '..\..\includes\navbar.php';?> 
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/navbar.php';?> 
     
     <!-- Main Info-->  
     <div class="container text-center mt-5 content">
@@ -25,8 +25,22 @@ require_once "../../controllers/platformsController.php";
 
     //main variables
     $idPlatform = $_POST['platformId'];
-    $platformDeleted = deletePlatform ((int)$idPlatform);
-
+    
+    try{
+        $platformDeleted = deletePlatform ((int)$idPlatform);
+      } catch (Exception $error){
+        $platformDeleted = $error->getMessage();
+      }
+?>    
+      <!-- Capture Error -->
+      <?php if(is_string($platformDeleted)): ?>
+            <div class='alert alert-danger' role='alert'>
+              <p><?= $platformDeleted ?></p>
+              <?php die; ?>
+            </div>
+      <?php endif; ?>
+      <!-- ############# -->
+<?php
     //Checkl the delete Result
     if($platformDeleted){
     ?>
@@ -43,3 +57,6 @@ require_once "../../controllers/platformsController.php";
     <?php
     }
     ?>
+    <!-- Footer-->  
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/footer.php';?> 
+</body>

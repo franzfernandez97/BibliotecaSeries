@@ -1,6 +1,12 @@
 <?php
+
   require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/languagesController.php';
-  $languagesList = getAllLanguges();
+  try{
+    $languagesList = getAllLanguges();
+  } catch (Exception $error){
+    $languagesList = $error->getMessage();
+  }
+  
 ?>
 
 <!DOCTYPE html>
@@ -23,6 +29,14 @@
             <a class="btn btn-primary px-5" href="createLanguage.php">Crear</a>
         </div>
     </div>
+    <!-- Capture Error -->
+    <?php if(is_string($languagesList)): ?>
+          <div class='alert alert-danger' role='alert'>
+            <p><?= $languagesList ?></p>
+            <?php die; ?>
+          </div>
+    <?php endif; ?>
+    <!-- ############# -->
     <table class="table table-striped table-hover">
       <thead>
         <tr>
@@ -60,10 +74,7 @@
               </td>
             </tr>
           <?php endforeach; ?>
-        <?php elseif(is_string($languagesList)): ?>
-          <div class='alert alert-danger' role='alert'>
-            <p><?= $languagesList ?></p>
-        </div>
+        
         <?php else: ?>
           <tr>
             <td colspan="6">No hay lenguajes</td>

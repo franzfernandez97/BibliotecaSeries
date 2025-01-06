@@ -1,7 +1,13 @@
 <?php
 
-require_once "../../controllers/seriesController.php";
-require_once "../../controllers/platformsController.php";
+require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/seriesController.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/platformsController.php';
+
+try{
+$seriesList = listSeries();
+} catch (Exception $error){
+    $seriesList = $error->getMessage();
+}
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +22,7 @@ require_once "../../controllers/platformsController.php";
 </head>
 <body>
     <!-- Nav Bar-->
-    <?php include '..\..\includes\navbar.php';?>
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/navbar.php';?>
 
     <div class="container text-center mt-5 content">
         <h1 class="display-3">Lista de Series</h1>
@@ -28,10 +34,19 @@ require_once "../../controllers/platformsController.php";
             </div>
         </div>
 
+        <!-- Capture Error -->
+        <?php if(is_string($seriesList)): ?>
+            <div class='alert alert-danger' role='alert'>
+                <p><?= $seriesList ?></p>
+                <?php die; ?>
+            </div>
+        <?php endif; ?>
+        <!-- ############# -->
+            
             <!-- Table series Data -->
             <div class="row mt-4">
                 <?php
-                $seriesList = listSeries();
+                
                 if (is_array($seriesList) && count($seriesList) > 0) {
                 ?>
                     <!-- IF data exists -->
@@ -53,13 +68,14 @@ require_once "../../controllers/platformsController.php";
                                 $platformObjt = getPlatformData((int)$series->getPlatformId());
                                 echo $platformObjt->getName() ?> </td>
                                 <td>
-                                    <div class="btn-group" role="group" aria-label="Acciones">
+                                    <div class="d-flex justify-content-center gap-2" role="group" aria-label="Acciones">
                                         <a class= "btn btn-success" href="edit.php?id=<?php echo $series->getId(); ?>">Editar</a>
                                         <form name="delete_form" action="delete.php" method="POST" style="display:inline;">
                                             <input type="hidden" name="seriesId" value="<?php echo $series->getId()?>">
                                             <button type="submit" class="btn btn-danger">Borrar</button>
                                         </form>
-                                    </div>
+                                        <a class="btn btn-primary" href="serieInformation.php?id=<?=$series->getId() ?>">Ver</a>
+                                    </div>    
                                 </td>
                             </tr>
                         </tbody>
@@ -75,10 +91,10 @@ require_once "../../controllers/platformsController.php";
     </div>
 
     <!-- Footer-->
-    <?php include '..\..\includes\footer.php';?>
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/footer.php';?>
 
     <!-- Import the confirmDelete.js file -->
-    <script src="..\..\includes\confirmDelete.js"></script>
+    <script src="/BibliotecaSeries/includes/confirmDelete.js"></script>
     <script>
         // Attach the confirmDelete function to the form's submit event
         document.forms["delete_form"].addEventListener("submit", confirmDelete);
