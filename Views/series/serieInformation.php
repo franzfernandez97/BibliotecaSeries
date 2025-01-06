@@ -5,17 +5,87 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/platformsC
 
 $serieId = (int)$_GET['id'];
 
+try{
 $serieInformation = getSerieData($serieId);
-
-$platformObjt = getPlatformData((int)$serieInformation->getPlatformId());
-
-$actorsList = listActorsBySerie($serieId);
-
-$directorsList = listDirectorsBySerie($serieId);
-
-$lenguageDict = listLanguagesBySerie($serieId);
-
+} catch (Exception $error){
+    $serieInformation = $error->getMessage();
+}
 ?>
+<!-- Capture Error -->
+<?php if(is_string($serieInformation)): ?>
+        <div class='alert alert-danger' role='alert'>
+        <p><?= $serieInformation ?></p>
+        <?php die; ?>
+        </div>
+<?php endif; ?>
+<!-- ############# -->
+
+<?php
+try{
+$platformObjt = getPlatformData((int)$serieInformation->getPlatformId());
+} catch (Exception $error){
+    $platformObjt = $error->getMessage();
+}
+?>
+<!-- Capture Error -->
+<?php if(is_string($platformObjt)): ?>
+        <div class='alert alert-danger' role='alert'>
+        <p><?= $platformObjt ?></p>
+        <?php die; ?>
+        </div>
+<?php endif; ?>
+<!-- ############# -->
+
+<?php
+try{
+$actorsList = listActorsBySerie($serieId);
+} catch (Exception $error){
+    $actorsList = $error->getMessage();
+}
+?>
+<!-- Capture Error -->
+<?php if(is_string($actorsList)): ?>
+        <div class='alert alert-danger' role='alert'>
+        <p><?= $actorsList ?></p>
+        <?php die; ?>
+        </div>
+<?php endif; ?>
+<!-- ############# -->
+
+
+<?php
+try{
+$directorsList = listDirectorsBySerie($serieId);
+} catch (Exception $error){
+    $directorsList = $error->getMessage();
+}
+?>
+<!-- Capture Error -->
+<?php if(is_string($directorsList)): ?>
+        <div class='alert alert-danger' role='alert'>
+        <p><?= $directorsList ?></p>
+        <?php die; ?>
+        </div>
+<?php endif; ?>
+<!-- ############# -->
+
+
+<?php
+try{
+$lenguageDict = listLanguagesBySerie($serieId);
+} catch (Exception $error){
+    $lenguageDict = $error->getMessage();
+}
+?>
+<!-- Capture Error -->
+<?php if(is_string($lenguageDict)): ?>
+        <div class='alert alert-danger' role='alert'>
+        <p><?= $lenguageDict ?></p>
+        <?php die; ?>
+        </div>
+<?php endif; ?>
+<!-- ############# -->
+
 
 <!DOCTYPE html>
 <html lang="en">

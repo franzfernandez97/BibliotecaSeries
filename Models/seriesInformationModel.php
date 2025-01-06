@@ -38,6 +38,10 @@ class SeriesInformation {
 
     public function getActorsBySerie(): array {
         $mysqli = Database::getDbConnection();
+        // Get the error message from the database connection
+        if(is_string($mysqli)){
+          throw new Exception("Error al conectar con la base de datos: ". $mysqli);
+      }
         $query = 'SELECT
                       a.id AS id,
                       a.firstname AS firstname,
@@ -50,6 +54,7 @@ class SeriesInformation {
                       ON series_actors.idactor = a.id
                   WHERE
                       series_actors.idserie = ?';
+        try{
         $stmt = $mysqli->prepare($query);
         $stmt->bind_param("i", $this->serieId);
         $stmt->execute();
@@ -61,6 +66,9 @@ class SeriesInformation {
             array_push($actors, $itemObject);
           }
         }
+          }catch (Exception $error) {
+            throw new Exception("Error al tratar de hacer la consulta: " . $error->getMessage());
+        }
         $mysqli->close();
         return $actors;
       }
@@ -69,6 +77,10 @@ class SeriesInformation {
 
       public function getDirectorBySerie(): array {
         $mysqli = Database::getDbConnection();
+        // Get the error message from the database connection
+        if(is_string($mysqli)){
+          throw new Exception("Error al conectar con la base de datos: ". $mysqli);
+      }
         $query = 'SELECT
                     d.id AS id,
                     d.firstname AS firstname,
@@ -81,6 +93,7 @@ class SeriesInformation {
                       ON sd.iddirector = d.id
                     WHERE
                       sd.idserie = ?';
+        try{
         $stmt = $mysqli->prepare($query);
         $stmt->bind_param("i", $this->serieId);
         $stmt->execute();
@@ -94,12 +107,19 @@ class SeriesInformation {
             array_push($directors, $itemObject);
           }
         }
+          }catch (Exception $error) {
+            throw new Exception("Error al tratar de hacer la consulta: " . $error->getMessage());
+        }
         $mysqli->close();
         return $directors;
       }
 
       public function getLanguagesBySerie() {
         $mysqli = Database::getDbConnection();
+        // Get the error message from the database connection
+        if(is_string($mysqli)){
+          throw new Exception("Error al conectar con la base de datos: ". $mysqli);
+      }
         $query = 'SELECT
                     l.id AS id,
                     l.name AS "name",
@@ -111,6 +131,8 @@ class SeriesInformation {
                       ON ls.idlanguage = l.id
                     WHERE
                       ls.idserie = ?';
+
+        try{
         $stmt = $mysqli->prepare($query);
         $stmt->bind_param("i", $this->serieId);
         $stmt->execute();
@@ -127,6 +149,9 @@ class SeriesInformation {
             array_push($languajes, $itemObject);
           }
         }
+        }catch (Exception $error) {
+          throw new Exception("Error al tratar de hacer la consulta: " . $error->getMessage());
+      }
         $mysqli->close();
         return $languajes;
       }
