@@ -80,11 +80,20 @@ class DirectorSeries {
   }
   public function addDirectorToSeries($directorId, array $series): void {
     $mysqli = Database::getDbConnection();
+    if(is_string($mysqli)){
+      throw new Exception("Error al conectar con la base de datos: ". $mysqli);
+    }
     $query = 'INSERT INTO series_directors (iddirector, idserie) VALUES (?, ?)';
-    foreach ($series as $serie) {
-      $smtm = $mysqli->prepare($query);
-      $smtm->bind_param('ii', $directorId, $serie);
-      $smtm->execute();
+    try {
+      foreach ($series as $serie) {
+        $smtm = $mysqli->prepare($query);
+        $smtm->bind_param('ii', $directorId, $serie);
+        $smtm->execute();
+      }
+      $smtm->close();
+      $mysqli->close();
+    }catch (Exception $error) {
+      throw new Exception("Error al tratar de agregar director a la serie: " . $error->getMessage());
     }
   }
   public function updateDirectorSeries(int $directorId, array $seriesId) {

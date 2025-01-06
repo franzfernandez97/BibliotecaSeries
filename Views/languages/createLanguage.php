@@ -1,8 +1,12 @@
 <?php
   require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/languagesController.php';
+  require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/seriesController.php';
+  require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/languageSeriesController.php';
 
-
+  $series = listSeries();
 ?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -38,6 +42,11 @@
           if (isset($_POST["languageName"]) && isset($_POST["languageCode"])){
               $languageCreated = createLanguage(languageName: $_POST['languageName'],languageCode: $_POST['languageCode']);
           }
+          if (!empty($_POST['languageType']) && isset($_POST['languageType']) && isset($_POST['series']) && is_array($_POST['series']) && is_array($_POST['languageType']) && is_int($languageCreated)){
+            $series = $_POST['series'];
+            $languageType = $_POST['languageType'];
+            addRelationships($languageCreated, $series, $languageType);
+          }
 
         }
 
@@ -59,6 +68,30 @@
                         <label for="languageCode" class="form-label">Código ISO</label>
                         <input id="languageCode" name="languageCode" type="text" class="form-control" placeholder="Ingrese un código" value="" required>
                     </div>
+                    <h2>Asociar el idioma con las series</h2>
+                    <div class="mb-3 d-flex flex-column align-items-start">
+                      <label for="series" class="form-label">Series</label>
+                      <select id="series" name="series[]" class="w-100 checkbox-list" multiple aria-label="multiple select example">
+                        <option value="<?=(int)0?>" selected> --Seleccione una opción-- </option>
+                        <?php foreach ($series as $serie): ?>
+                            <option value="<?= (int)$serie->getId() ?>">
+                              <?= $serie->getTitle() ?>
+                            </option>
+                        <?php endforeach; ?>
+                      </select>
+                    </div>
+                    <div class="mb-3 d-flex flex-column align-items-start">
+                      <label for="languageType" class="form-label">Disponibilidad</label>
+                      <select id="languageType" name="languageType[]" class="w-100 checkbox-list" multiple aria-label="multiple select example">
+                        <option value="" selected> --Seleccione una opción-- </option>
+                        <option value="audio">
+                          Audio
+                        </option>
+                        <option value="subtitle">
+                          Subtitulos
+                        </option>
+                      </select>
+                    </div>
                     <!-- Submit button inside the form -->
                     <input type="submit" value="Crear" class="btn btn-primary" name="createBtn">
                 </form>
@@ -74,7 +107,7 @@
 
         }else{
             //if the createlanguage was succesfully executed
-            if (is_string($languageCreated)) {
+            if (is_string($languageCreated) && $languageCreated) {
     ?>
             <div class='alert alert-danger' role='alert'>
                   <p><?= $languageCreated ?></p><a href='createLanguage.php'> Volver a intentar.</a>

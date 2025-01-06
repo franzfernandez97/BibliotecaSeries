@@ -52,8 +52,15 @@
     }
     public function getAll():array {
       $mysqli = Database::getDbConnection();
+      if(is_string($mysqli)){
+        throw new Exception("Error al conectar con la base de datos: ". $mysqli);
+      }
       $query = "SELECT * FROM $this->table";
-      $result = $mysqli->query($query);
+      try {
+        $result = $mysqli->query($query);
+      }catch (Exception $error) {
+        throw new Exception("Error al tratar de hacer la consulta: " . $error->getMessage());
+      }
       $listData = [];
 
       if ($result->num_rows > 0) {
@@ -68,88 +75,113 @@
 
     public function getById(){
       $mysqli = Database::getDbConnection();
-      $query = 'SELECT * FROM actors WHERE id = ?';
-      $stmt = $mysqli->prepare($query);
-      $stmt->bind_param('i', $this->actorId);
-      $stmt->execute();
-      $result = $stmt->get_result();
+      if(is_string($mysqli)){
+        throw new Exception("Error al conectar con la base de datos: ". $mysqli);
+      }
+      $query = "SELECT * FROM $this->table WHERE id = ?";
+      try {
+        $stmt = $mysqli->prepare($query);
+        $stmt->bind_param('i', $this->actorId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+      }catch (Exception $error) {
+        throw new Exception("Error al tratar de hacer la consulta: " . $error->getMessage());
+      }
+
       if ($result->num_rows > 0){
         foreach ($result as $item){
             $itemObject = new Actors($item["id"], $item["firstname"], $item['lastname'], $item['birthdate'], nationality: $item['nationality']);
             return $itemObject;
         }
       }
+      $stmt->close();
       $mysqli->close();
       return false;
     }
 
     public function createActor(){
-      $platformCreated = false;
       $mysqli = Database::getDbConnection();
-
-      // Use prepared statement to prevent SQL injection
-      $stmt = $mysqli->prepare("SELECT firstname, lastname FROM $this->table WHERE firstname = ? AND lastname = ?");
-      $stmt->bind_param("ss", $this->firstName, $this->lastName);
-
-      $stmt->execute();
-      $result = $stmt->get_result();
-
-      if ($result->num_rows <= 0) {
-          //if dont exits its going to create it
-          $insertStmt = $mysqli->prepare("INSERT INTO $this->table (firstname,lastname,birthdate,nationality) VALUES (?,?,?,?)");
-          $insertStmt->bind_param("ssss", $this->firstName, $this->lastName, $this->birthDate, $this->nationality);
-          if ($insertStmt->execute()) {
-
-            $platformCreated = (int)$insertStmt->insert_id;  // Platform created successfully
-          }
+      if(is_string($mysqli)){
+        throw new Exception("Error al conectar con la base de datos: ". $mysqli);
       }
-
-      $stmt->close();
+      try {
+        $resultDuplicate = $this->getDuplicate();
+        if ($resultDuplicate){
+          throw new Exception("El actor ya existe");
+        }
+      } catch (Exception $error) {
+        throw new Exception("" . $error->getMessage());
+      }
+      try {
+        $insertStmt = $mysqli->prepare("INSERT INTO $this->table (firstname,lastname,birthdate,nationality) VALUES (?,?,?,?)");
+        $insertStmt->bind_param("ssss", $this->firstName, $this->lastName, $this->birthDate, $this->nationality);
+        $result = $insertStmt->execute();
+        $platformCreated = (int)$insertStmt->insert_id;
+      }catch (Exception $error) {
+        throw new Exception("Error al tratar de crear el actor: " . $error->getMessage());
+      }
+      $insertStmt->close();
       $mysqli->close();
-      return $platformCreated;
+      return $result ? $platformCreated : false;
     }
     public function updateActor() {
-      $platformUpdated = false;
       $mysqli = Database::getDbConnection();
-
-      // Prepare the update statement to prevent SQL injection
-      $stmt = $mysqli->prepare("UPDATE $this->table SET firstname=?,lastname=?,birthdate=?,nationality=? WHERE id = ?");
-      $stmt->bind_param("ssssi", $this->firstName, $this->lastName, $this->birthDate, $this->nationality, $this->actorId);
-
-      // Execute the statement
-      if ($stmt->execute()) {
-          // Check if any row was affected (i.e., if the update was successful)
-          if ($stmt->affected_rows > 0) {
-              $platformUpdated = true;
-          }
+      if(is_string($mysqli)){
+        throw new Exception("Error al conectar con la base de datos: ". $mysqli);
+      }
+      try {
+        $stmt = $mysqli->prepare("UPDATE $this->table SET firstname=?,lastname=?,birthdate=?,nationality=? WHERE id = ?");
+        $stmt->bind_param("ssssi", $this->firstName, $this->lastName, $this->birthDate, $this->nationality, $this->actorId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+      }catch(Exception $error) {
+        throw new Exception("Error al editar el actor: ". $error->getMessage());
       }
       $stmt->close();
       $mysqli->close();
-
-      return $platformUpdated;
-    }
+      return $result ? true : false;
+  }
 
     public function delete(){
     $deleted = false;
     $mysqli = Database::getDbConnection();
-
-    //prepate statement to Prevent sql injection
-    $stmt = $mysqli->prepare("DELETE FROM $this->table WHERE id = ?");
-    $stmt->bind_param("i", $this->actorId);
-
-    //execute the statement
-    if ($stmt->execute()){
-        //check rows
-        if($stmt->affected_rows > 0){
-            $deleted = true; //record succesfully deleted
-        }
+    if(is_string($mysqli)){
+      throw new Exception("Error al conectar con la base de datos: ". $mysqli);
     }
-    // Close the statement and connection
+    try {
+      $stmt = $mysqli->prepare("DELETE FROM $this->table WHERE id = ?");
+      $stmt->bind_param("i", $this->actorId);
+      $result = $stmt->execute();
+      $stmt->close();
+      $mysqli->close();
+      return $result ? true : false;
+    }catch(Exception $error) {
+      throw new Exception("Error al borrar el actor: ". $error->getMessage());
+    }
+  }
+  public function getDuplicate() {
+    $mysqli = Database::getDbConnection();
+    if(is_string($mysqli)){
+      throw new Exception("Error al conectar con la base de datos: ". $mysqli);
+    }
+    $query = "SELECT * FROM $this->table WHERE LOWER(firstname) = LOWER(?) AND LOWER(lastname) = LOWER(?)";
+    try {
+      $stmt = $mysqli->prepare($query);
+      $stmt->bind_param("ss", $this->firstName,$this->lastName);
+      $stmt->execute();
+      $result = $stmt->get_result();
+    }catch (Exception $error) {
+      throw new Exception("Error al tratar de hacer la consulta: " . $error->getMessage());
+    }
+    if ($result->num_rows > 0){
+      $stmt->close();
+      $mysqli->close();
+      return true;
+    }
     $stmt->close();
     $mysqli->close();
-
-    return $deleted;
-    }
+    return false;
+  }
 
   }
 ?>

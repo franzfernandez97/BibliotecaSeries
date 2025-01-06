@@ -25,6 +25,9 @@ class ActorSeries {
   }
   public function getActorsBySerie(): array {
     $mysqli = Database::getDbConnection();
+    if(is_string($mysqli)){
+      throw new Exception("Error al conectar con la base de datos: ". $mysqli);
+    }
     $query = 'SELECT
                 actors.id AS actorId,
                 actors.firstname AS actorFirstName,
@@ -37,10 +40,14 @@ class ActorSeries {
                   actors ON series_actors.idactor = actors.id
                 WHERE
                   series_actors.idserie = ?';
-    $stmt = $mysqli->prepare($query);
-    $stmt->bind_param("i", $this->serieId);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    try {
+      $stmt = $mysqli->prepare($query);
+      $stmt->bind_param("i", $this->serieId);
+      $stmt->execute();
+      $result = $stmt->get_result();
+    }catch (Exception $error) {
+      throw new Exception("Error al tratar de hacer la consulta: " . $error->getMessage());
+    }
     $actors = [];
     if ($result->num_rows > 0) {
       foreach ($result as $item){
@@ -48,11 +55,15 @@ class ActorSeries {
         array_push(array: $actors, values: $itemObject);
       }
     }
+    $stmt->close();
     $mysqli->close();
     return $actors;
   }
   public function getSeriesByActors(): array {
     $mysqli = Database::getDbConnection();
+    if(is_string($mysqli)){
+      throw new Exception("Error al conectar con la base de datos: ". $mysqli);
+    }
     $query = 'SELECT
                 series.id AS serieId,
                 series.title AS serieTitle,
@@ -63,10 +74,14 @@ class ActorSeries {
                   series ON series_actors.idserie = series.id
                 WHERE
                   series_actors.idactor = ?';
-    $stmt = $mysqli->prepare($query);
-    $stmt->bind_param("i", $this->actorId);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    try {
+      $stmt = $mysqli->prepare($query);
+      $stmt->bind_param("i", $this->actorId);
+      $stmt->execute();
+      $result = $stmt->get_result();
+    }catch (Exception $error) {
+      throw new Exception("Error al tratar de hacer la consulta: " . $error->getMessage());
+    }
     $series = [];
     if ($result->num_rows > 0) {
       foreach ($result as $item){
@@ -74,24 +89,41 @@ class ActorSeries {
         array_push($series,$itemObject);
       }
     }
+    $stmt->close();
     $mysqli->close();
     return $series;
   }
   public function addActorToSeries($actorId, array $series): void {
     $mysqli = Database::getDbConnection();
+    if(is_string($mysqli)){
+      throw new Exception("Error al conectar con la base de datos: ". $mysqli);
+    }
     $query = 'INSERT INTO series_actors (idactor, idserie) VALUES (?, ?)';
-    foreach ($series as $serie) {
-      $smtm = $mysqli->prepare($query);
-      $smtm->bind_param('ii', $actorId, $serie);
-      $smtm->execute();
+    try {
+      foreach ($series as $serie) {
+        $smtm = $mysqli->prepare($query);
+        $smtm->bind_param('ii', $actorId, $serie);
+        $smtm->execute();
+      }
+      $smtm->close();
+      $mysqli->close();
+    }catch (Exception $error) {
+      throw new Exception("Error al tratar de agregar actor a la serie: " . $error->getMessage());
     }
   }
   public function updateActorSeries(int $actorId, array $seriesId) {
     $mysqli = Database::getDbConnection();
+    if(is_string($mysqli)){
+      throw new Exception("Error al conectar con la base de datos: ". $mysqli);
+    }
     $query = 'DELETE FROM series_actors WHERE idactor = ?';
-    $stmt = $mysqli->prepare($query);
-    $stmt->bind_param('i', $actorId);
-    $stmt->execute();
+    try {
+      $stmt = $mysqli->prepare($query);
+      $stmt->bind_param('i', $actorId);
+      $stmt->execute();
+    }catch (Exception $error) {
+      throw new Exception("Error al tratar eliminar actor de la serie: " . $error->getMessage());
+    }
     $queryInsert = 'INSERT INTO series_actors (idactor, idserie) VALUES (?, ?)';
     $stmtInsert = $mysqli->prepare($queryInsert);
     foreach ($seriesId as $serieId) {
