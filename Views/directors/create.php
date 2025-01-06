@@ -1,6 +1,9 @@
 <?php
-//Import libraries
-require_once "../../controllers/directorsController.php";
+ require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/directorsController.php';
+ require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/seriesController.php';
+ require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/directorSeriesController.php';
+
+ $series = listSeries();
 
 ?>
 <!DOCTYPE html>
@@ -15,7 +18,7 @@ require_once "../../controllers/directorsController.php";
 </head>
 <body>
     <!-- Nav Bar-->  
-    <?php include '..\..\includes\navbar.php';?> 
+    <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/navbar.php';?>
 
     <!-- Main Info-->
     <div class="container text-center mt-5 content">
@@ -37,6 +40,16 @@ require_once "../../controllers/directorsController.php";
             //Check if POST variable platformName was assigned to create a platform
             if (isset($_POST["firstName"]) && isset($_POST["lastName"]) && isset($_POST["birthDate"]) && isset($_POST["nationality"])){
                 $directorCreated = createDirector(firstName: $_POST["firstName"], lastName: $_POST["lastName"], birthDate: $_POST["birthDate"], nationality: $_POST["nationality"]);
+            }
+
+            if (!empty($_POST['series']) && is_array($_POST['series'])) {
+                $seriesSelected = $_POST['series']; // Aquí tienes todas las
+                $seriesId = [];
+                // Ejemplo: Mostrar los valores seleccionados
+                foreach ($seriesSelected as $serieId) {
+                  array_push($seriesId, $serieId);
+                }
+                addDirectorToSeries($directorCreated, $seriesId);
             }
         }
 
@@ -64,17 +77,19 @@ require_once "../../controllers/directorsController.php";
                     </div>
                     <div class="mb-3 d-flex flex-column align-items-start">
                         <label for="nationality" class="form-label">Nacionalidad</label>
-                        <select name="nationality" id="nationality" class="form-control" >
-                        <option value="">Seleccione una opcion</option>
-                        <option value="USA">USA</option>
-                        <option value="UK">UK</option>
-                        <option value="Mexico">Mexico</option>
-                        <option value="Canada">Canada</option>
-                        <option value="New Zealand">New Zealand</option>
-                        <option value="Taiwan">Taiwan</option>
-                        <option value="Spain">Spain</option>
+                        <input id="nationality" name="nationality" type="text" class="form-control" placeholder="Ingrese una nacionalidad" value="" required>
                     </div>
-                    <br><br>
+                    <div class="mb-3 d-flex flex-column align-items-start">
+                        <label for="series" class="form-label">Series que dirigió</label>
+                        <select id="series" name="series[]" class="w-100 checkbox-list" multiple aria-label="multiple select example">
+                          <option value="<?=(int)0?>" selected> --Seleccione una opción-- </option>
+                          <?php foreach ($series as $serie): ?>
+                              <option value="<?= (int)$serie->getId() ?>">
+                                <?= $serie->getTitle() ?>
+                              </option>
+                          <?php endforeach; ?>
+                        </select>
+                    </div>
                     <!-- Submit button inside the form -->
                     <input type="submit" value="Crear" class="btn btn-primary" name="createBtn">
                 </form>

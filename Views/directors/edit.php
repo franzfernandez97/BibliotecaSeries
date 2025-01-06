@@ -1,9 +1,17 @@
 <?php
-  require_once "../../controllers/directorsController.php";
+ require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/directorsController.php';
+ require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/seriesController.php';
+ require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/directorSeriesController.php';
 
   $directorId = (int)$_GET['id'];
   $director = getDirector(directorId: $directorId);
-  
+
+  $seriesDirector = listSeriesByDirector(directorId: $directorId);
+  $series = listSeries();
+  $listSeries = [];
+  foreach ($seriesDirector as $serie){
+    array_push($listSeries, $serie->getId());
+  }
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -17,7 +25,7 @@
 </head>
 <body>
       <!-- Nav Bar-->
-      <?php include '..\..\includes\navbar.php';?> 
+      <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/navbar.php';?>
     <!-- Main Info-->
     <div class="container text-center mt-5 content">
         <h1 class="display-4">Editar Director </h1>
@@ -38,6 +46,16 @@
             //Check if POST variable platformName was assigned to create a platform
             if (isset($_POST["firstName"]) && isset($_POST["lastName"]) && isset($_POST["birthDate"]) && isset($_POST["nationality"])){
                 $directorCreated = updateDirector(directorId: $directorId,firstName: $_POST["firstName"], lastName: $_POST["lastName"], birthDate: $_POST["birthDate"], nationality: $_POST["nationality"]);
+            }
+
+            if (!empty($_POST['series']) && is_array($_POST['series'])) {
+                $seriesSelected = $_POST['series']; // Aquí tienes todas las
+                $seriesId = [];
+                // Ejemplo: Mostrar los valores seleccionados
+                foreach ($seriesSelected as $serieId) {
+                  array_push($seriesId, $serieId);
+                }
+                $directorSerieCreated = updateDirectorSeries($directorId, $seriesId);
             }
         }
 
@@ -65,15 +83,25 @@
                     </div>
                     <div class="mb-3 d-flex flex-column align-items-start">
                         <label for="nationality" class="form-label">Nacionalidad</label>
-                        <select name="nationality" id="nationality" class="form-control" />
-                        <option value="<?= $director->getNationality()?>" selected> <?= $director->getNationality()?>
-                        <option value="USA">USA</option>
-                        <option value="UK">UK</option>
-                        <option value="Mexico">Mexico</option>
-                        <option value="Canada">Canada</option>
-                        <option value="New Zealand">New Zealand</option>
-                        <option value="Taiwan">Taiwan</option>
-                        <option value="Spain">Spain</option>
+                        <input id="nationality" name="nationality" type="text" class="form-control" placeholder="Ingrese la necionalidad" value="<?= $director->getNationality() ?>" required>
+                    </div>
+                    <div class="mb-3 d-flex flex-column align-items-start">
+                        <label for="series" class="form-label">Series que dirigió</label>
+                        <select id="series" name="series[]" class="w-100 checkbox-list" multiple aria-label="multiple select example">
+                          <option value="<?=(int)0?>" > --Seleccione una opción-- </option>
+                          <?php foreach ($series as $serie):
+                            if(in_array($serie->getId(), $listSeries)) {
+                            ?>
+                              <option value="<?= (int)$serie->getId() ?>" selected>
+                                <?= $serie->getTitle() ?>
+                              </option>
+                            <?php } else { ?>
+                              <option value="<?= (int)$serie->getId() ?>">
+                                <?= $serie->getTitle() ?>
+                              </option>
+                          <?php }
+                          endforeach; ?>
+                        </select>
                     </div>
 
                     <!-- Submit button inside the form -->
@@ -91,17 +119,17 @@
 
         }else{
             //if the createPlatform was succesfully executed
-            if ($directorCreated){
+            if ($directorCreated && $directorSerieCreated){
     ?>
             <div class='alert alert-success' role='alert'>
-                ¡El director fue creado con éxito! <a href='list.php'>Volver al listado de plataformas.</a>
+                ¡El director fue editado con éxito! <a href='list.php'>Volver al listado de plataformas.</a>
             </div>
     <?php
             } else {
                 // ElseWarning Message
     ?>
                 <div class='alert alert-danger' role='alert'>
-                    Director no ha sido editado ! ya esxiste en la DB. Por favor ingrese otro nombre <a href='list.php'>Refrescar.</a>
+                    Director no ha sido editado ! ya existe en la DB. Por favor ingrese otro nombre <a href='list.php'>Refrescar.</a>
                 </div>
     <?php
             }

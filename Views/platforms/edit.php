@@ -1,6 +1,6 @@
 <?php
 //Import libraries
-require_once "../../controllers/platformsController.php";
+require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/platformsController.php';
 
 ?>
 
@@ -16,15 +16,28 @@ require_once "../../controllers/platformsController.php";
 </head>
 <body>
     <!-- Nav Bar-->  
-    <?php include '..\..\includes\navbar.php';?> 
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/navbar.php';?> 
     
     <!-- Main Info-->  
     <div class="container text-center mt-5 content">
         <h1 class="display-3">Editar Plataforma </h1>
         <?php 
             $idPlatform = $_GET['id'];
-            $platformObject = getPlatformData((int)$idPlatform);
-
+            try{
+                $platformObject = getPlatformData((int)$idPlatform);
+              } catch (Exception $error){
+                $platformObject = $error->getMessage();
+              }
+        ?>    
+              <!-- Capture Error -->
+              <?php if(is_string($platformObject)): ?>
+                    <div class='alert alert-danger' role='alert'>
+                      <p><?= $platformObject ?></p>
+                      <?php die; ?>
+                    </div>
+              <?php endif; ?>
+              <!-- ############# -->
+        <?php
             $sendData = false;
             $platformEdited = false;
 
@@ -34,7 +47,7 @@ require_once "../../controllers/platformsController.php";
 
             if (isset($sendData)){
                 if (isset($_POST["platformName"])){
-                    $platformEdited = updatePlatform($_POST["platformId"], $_POST["platformName"]);
+                    $platformEdited = updatePlatform((int)$_POST["platformId"], $_POST["platformName"]);
                 }  
             }
 
@@ -77,5 +90,5 @@ require_once "../../controllers/platformsController.php";
         }
     ?>
      <!-- Footer-->  
-     <?php include '..\..\includes\footer.php';?> 
+     <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/footer.php';?> 
 </body>

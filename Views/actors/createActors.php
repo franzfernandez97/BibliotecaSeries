@@ -3,7 +3,6 @@
   require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/seriesController.php';
   require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/actorSeriesController.php';
 
-
   $series = listSeries();
 
 ?>

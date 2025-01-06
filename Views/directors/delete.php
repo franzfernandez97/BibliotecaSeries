@@ -1,6 +1,6 @@
 <?php
-//Import libraries
-require_once "../../controllers/directorsController.php";
+
+ require_once $_SERVER['DOCUMENT_ROOT'] . '/BibliotecaSeries/controllers/directorsController.php';
 
 ?>
 
