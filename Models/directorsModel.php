@@ -88,29 +88,33 @@ class Directors {
 
     // CREATE: Add a new Directors
     public function create(){
-        $directorCreated = false;
+        //$directorCreated = false;
         $mysqli = Database::getDbConnection();
-  
-        // Use prepared statement to prevent SQL injection
-        $stmt = $mysqli->prepare("SELECT firstname, lastname FROM $this->table WHERE firstname = ? AND lastname = ?");
-        $stmt->bind_param("ss", $this->firstName, $this->lastName);
-  
-        $stmt->execute();
-        $result = $stmt->get_result();
-  
-        if ($result->num_rows <= 0) {
-            //if dont exits its going to create it
-            $insertStmt = $mysqli->prepare("INSERT INTO $this->table (firstname,lastname,birthdate,nationality) VALUES (?,?,?,?)");
-            $insertStmt->bind_param("ssss", $this->firstName, $this->lastName, $this->birthDate, $this->nationality);
-            if ($insertStmt->execute()) {
-  
-              $directorCreated = (int)$insertStmt->insert_id;  // Platform created successfully
-            }
+        $dupli = new Actors();
+        if(is_string($mysqli)){
+          throw new Exception("Error al conectar con la base de datos: ". $mysqli);
+        }
+
+        try {
+          $resultDuplicate = $dupli->getDuplicate();
+          if ($resultDuplicate){
+            throw new Exception("El actor ya existe");
+          }
+        } catch (Exception $error) {
+          throw new Exception("" . $error->getMessage());
         }
   
-        $stmt->close();
+        try {
+          $insertStmt = $mysqli->prepare("INSERT INTO $this->table (firstname,lastname,birthdate,nationality) VALUES (?,?,?,?)");
+          $insertStmt->bind_param("ssss", $this->firstName, $this->lastName, $this->birthDate, $this->nationality);
+          $result = $insertStmt->execute();
+          $directorCreated = (int)$insertStmt->insert_id;
+        }catch (Exception $error) {
+          throw new Exception("Error al tratar de crear el director: " . $error->getMessage());
+        }
+        $insertStmt->close();
         $mysqli->close();
-        return $directorCreated;
+        return $result ? $directorCreated : false;
       }
 
     // UPDATE: Update an existing Directors by ID

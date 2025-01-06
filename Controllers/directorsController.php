@@ -1,15 +1,16 @@
 <?php
   require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/models/directorsModel.php';
 
-function listDirectors(){
-    //check no arguments were used
-    if (func_num_args()> 0){
-        throw new InvalidArgumentException( "Error función listDirectors: no acepta parametros");
-    }
+function textValidation($input) {
+    return preg_match('/^(?!\s)[\p{L}]+(?:[\p{L}\s]+)*$/u', $input);
+}
+
+function listDirectors():array{
+
     $model = new Directors();
     $directorList = $model->getAll();
     foreach ($directorList as $director){
-       $director->setBirthDate(date('d/m/Y', strtotime($director->getBirthDate())));
+      $director->setBirthDate(date('d/m/Y', strtotime($director->getBirthDate())));
     }
     return $directorList;
 }
@@ -23,10 +24,20 @@ function getDirector($directorId, $view = false){
     return $directorResult;
   }
 
-function createDirector($firstName, $lastName, $birthDate, $nationality):bool|int{
+function createDirector($firstName, $lastName, $birthDate, $nationality){
 
+    if (func_num_args() !== 4) {
+      throw new Exception("Error funcion createDirector: Se requiere llenar todos los parametros.");
+    }
+    if (!textValidation($firstName) || !textValidation($lastName) || !dateValidation($birthDate) || !textValidation($nationality)) {
+      return "Error funcion createDirector: Los parametros no pueden ser numeros ni caracteres especiales.";
+    }
     $newDirector = new Directors(firstName: $firstName, lastName: $lastName, birthDate: $birthDate, nationality: $nationality);
-    $isCreated = $newDirector->create();
+    try{
+      $isCreated = $newDirector->create();
+    }catch (Exception $error) {
+      return $error->getMessage();
+    }
     return $isCreated;
 }
 

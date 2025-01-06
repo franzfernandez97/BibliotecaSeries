@@ -34,7 +34,7 @@
   }
   function createActor ($firstName, $lastName, $birthDate, $nationality){
     if (func_num_args() !== 4) {
-      throw new Exception("Error funcion createSerie: Se requiere llenar todos los parametros.");
+      throw new Exception("Error funcion createDirector: Se requiere llenar todos los parametros.");
     }
     if (!textValidation($firstName) || !textValidation($lastName) || !dateValidation($birthDate) || !textValidation($nationality)) {
       return "Error funcion createSerie: Los parametros no pueden ser numeros ni caracteres especiales.";

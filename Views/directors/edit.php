@@ -55,7 +55,7 @@
                 foreach ($seriesSelected as $serieId) {
                   array_push($seriesId, $serieId);
                 }
-                $directorSerieCreated = updateDirectorSeries($directorId, $seriesId);
+                updateDirectorSeries($directorId, $seriesId);
             }
         }
 
@@ -119,7 +119,7 @@
 
         }else{
             //if the createPlatform was succesfully executed
-            if ($directorCreated && $directorSerieCreated){
+            if ($directorCreated){
     ?>
             <div class='alert alert-success' role='alert'>
                 ¡El director fue editado con éxito! <a href='list.php'>Volver al listado de plataformas.</a>
