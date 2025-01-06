@@ -1,1 +1,3 @@
 # BibliotecaSeries
+
+El proyecto consiste en desarrollar una aplicación web de un Biblioteca de Series, para lo cual se diseñó la base de datos en MySQL utilizando AWS como alojamiento. Se implementó el patrón MVC (Modelo-Vista-Controlador) en PHP para organizar y facilitar el mantenimiento del código. Además, se desarrollaron funcionalidades CRUD (Crear, Leer, Actualizar, Eliminar) para permitir a los usuarios gestionar la biblioteca de series. 
