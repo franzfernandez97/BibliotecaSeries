@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-  <title>Peliculas</title>
+  <title>Actores</title>
 </head>
 <body>
   <!-- Nav Bar-->
@@ -19,7 +19,7 @@
   <div class="container text-center mt-5 content" >
     <h1 class="display-3">Lista de actores</h1>
     <div class="row">
-        <div class="col text-start">
+        <div class="col text-start mb-3">
             <a class="btn btn-primary px-5" href="createActors.php">Crear</a>
         </div>
     </div>
@@ -29,7 +29,7 @@
           </div>
           <?php die; ?>
     <?php endif; ?>
-    <table class="table table-striped table-hover">
+    <table class="table table-hover">
       <thead>
         <tr>
           <th>

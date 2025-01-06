@@ -23,31 +23,39 @@ $seriesList = listSeriesByActor($actorId);
         <h1 class="mb-5 mt-5">
           Información <?= $actorInformation->getFirstName().' '.$actorInformation->getLastName() ?>
         </h1>
-        <section class="d-flex flex-column justify-content-start w-100 mb-5">
-          <table class="table">
+        <section class="d-flex flex-column justify-content-start align-items-center w-100 mb-5">
+          <table class="table text-start w-50">
             <tbody>
               <tr>
-                <td>Nombre</td>
+                <td><strong>
+                  Nombre
+                </strong></td>
                 <td><?= $actorInformation->getFirstName() ?></td>
               </tr>
               <tr>
-                <td>Apellidos</td>
+                <td><strong>
+                  Apellidos
+                </strong></td>
                 <td><?= $actorInformation->getLastName() ?></td>
               </tr>
               <tr>
-                <td>Fecha de nacimiento</td>
+                <td><strong>
+                  Fecha de nacimiento
+                </strong></td>
                 <td><?= $actorInformation->getBirthDate() ?></td>
               </tr>
               <tr>
-                <td>Nacionalidad</td>
+                <td><strong>
+                  Nacionalidad
+                </strong></td>
                 <td><?= $actorInformation->getNationality() ?></td>
               </tr>
             </tbody>
           </table>
         </section>
       </div>
-      <section class="w-100 justify-content-center mb-10">
-        <table class="table table-striped table-hover border-2 rounded-2">
+      <section class="d-flex w-100 justify-content-center mb-10">
+        <table class="table table-striped table-hover border-2 rounded-2 w-50">
           <thead class="border rounded-top">
             <tr>
               <th>Series</th>

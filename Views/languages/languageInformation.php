@@ -24,8 +24,8 @@
     <h1 class="mb-5 mt-5">
       Información Idioma
     </h1>
-    <section class="d-flex flex-column justify-content-start w-100 mb-5">
-      <table class="table">
+    <section class="d-flex flex-column justify-content-start align-items-center w-100 mb-5">
+      <table class="table w-50 text-center">
         <thead>
           <tr>
             <th>Idioma</th>

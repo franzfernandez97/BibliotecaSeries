@@ -23,7 +23,7 @@
 
         <!-- Link to create View -->
         <div class="row">
-            <div class="col text-start">
+            <div class="col text-start mb-3">
                 <a class="btn btn-primary px-5" href="create.php">Crear</a>
             </div>
         </div>
@@ -35,7 +35,7 @@
                 if (is_array($directorList) && count($directorList) > 0) {
                 ?>
                     <!-- IF data exists -->
-                    <table class="table table-striped table-hover">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>ID</th>
