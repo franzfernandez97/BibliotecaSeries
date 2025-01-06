@@ -44,7 +44,7 @@
             }
 
 
-            if (!empty($_POST['series']) && is_array($_POST['series'])) {
+            if (!empty($_POST['series']) && is_array($_POST['series']) && is_int($platformCreated)) {
               $seriesSelected = $_POST['series']; // Aquí tienes todas las
               $seriesId = [];
               // Ejemplo: Mostrar los valores seleccionados
@@ -67,11 +67,11 @@
                 <form  action="createActors.php" class="d-flex flex-column mb-10" method="POST">
                     <div class="mb-3 d-flex flex-column align-items-start">
                         <label for="firstName" class="form-label">Nombres</label>
-                        <input id="firstName" name="firstName" type="text" class="form-control" placeholder="Julian" value="" required>
+                        <input id="firstName" name="firstName" type="text" class="form-control" placeholder="Ingrese un nombre" value="" required>
                     </div>
                     <div class="mb-3 d-flex flex-column align-items-start">
                         <label for="lastName" class="form-label">Apellidos</label>
-                        <input id="lastName" name="lastName" type="text" class="form-control" placeholder="Introduce una plataforma" value="" required>
+                        <input id="lastName" name="lastName" type="text" class="form-control" placeholder="Ingrese un apellido" value="" required>
                     </div>
                     <div class="mb-3 d-flex flex-column align-items-start">
                         <label for="birthDate" class="form-label">Fecha de nacimiento</label>
@@ -79,7 +79,7 @@
                     </div>
                     <div class="mb-3 d-flex flex-column align-items-start">
                         <label for="nationality" class="form-label">Nacionalidad</label>
-                        <input id="nationality" name="nationality" type="text" class="form-control" placeholder="Introduce una plataforma" value="" required>
+                        <input id="nationality" name="nationality" type="text" class="form-control" placeholder="Ingrese una nacionalidad" value="" required>
                     </div>
                     <div class="mb-3 d-flex flex-column align-items-start">
                         <label for="series" class="form-label">Series en que trabajó</label>
@@ -108,18 +108,18 @@
 
         }else{
             //if the createPlatform was succesfully executed
-            if ($platformCreated){
+            if ($platformCreated && is_string($platformCreated)){
     ?>
-            <div class='alert alert-success' role='alert'>
-                ¡El actor fue creado con éxito! <a href='list.php'>Volver al listado de plataformas.</a>
-            </div>;
+            <div class='alert alert-danger' role='alert'>
+                <?= $platformCreated ?> <a href='createActors.php'>Refrescar.</a>
+            </div>
     <?php
             } else {
                 // ElseWarning Message
     ?>
-                <div class='alert alert-danger' role='alert'>
-                    ¡Plataforma no ha sido creada ! ya esxiste en la DB. Por favor ingrese otro nombre <a href='createActors.php'>Refrescar.</a>
-                </div>
+              <div class='alert alert-success' role='alert'>
+                ¡El actor fue creado con éxito! <a href='list.php'>Volver al listado de actores.</a>
+              </div>;
     <?php
             }
         }

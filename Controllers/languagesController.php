@@ -3,7 +3,7 @@
 
   function validacionTexto($input) {
     return preg_match('/^(?!\s)[\p{L}]+(?:[\p{L}\s]+)*$/u', $input);
-}
+  }
 
   function getAllLanguges ():array|string {
     $model = new Languages();

@@ -81,14 +81,14 @@ class Languages {
       $mysqli->close();
       return false;
     }
-    public function createLanguage(): bool {
+    public function createLanguage() {
       $mysqli = Database::getDbConnection();
       if(is_string($mysqli)){
         throw new Exception("Error al conectar con la base de datos: " . $mysqli);
       }
       $query = "INSERT INTO $this->table (name, isocode) VALUES (?, ?)";
       try {
-        $resultQuery =$this->getByCode();
+        $resultQuery =$this->getRegister();
         if ($resultQuery){
           throw new Exception("El idioma ya existe");
         }
@@ -96,20 +96,19 @@ class Languages {
         throw new Exception("" . $error->getMessage());
 
     }
-      // if ($repeat) {
-      //   throw new Exception("¡El idioma ya existe!");
-      // }
       try {
         $stmt = $mysqli->prepare($query);
-        $stmt->bind_param("ss", $this->languageId, $this->languageCode);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $stmt->bind_param("ss", $this->languageName, $this->languageCode);
+        if (!$stmt->execute()) {
+          throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+        }
+        $languageCreated = (int)$stmt->insert_id;
       }catch (Exception $error) {
         throw new Exception("Error al tratar de crear el idioma: " . $error->getMessage());
       }
       $stmt->close();
       $mysqli->close();
-      return $result ? true : false;
+      return $languageCreated > 0 ? $languageCreated : false;;
     }
     public function editlanguage(){
       $mysqli = Database::getDbConnection();
@@ -147,17 +146,17 @@ class Languages {
       }
 
     }
-    public function getByCode() {
+    public function getRegister() {
       $mysqli = Database::getDbConnection();
       if (is_string($mysqli)) {
           throw new Exception("Error al conectar con la base de datos: " . $mysqli);
       }
 
       // Preparar la consulta para verificar si el idioma existe
-      $query = "SELECT * FROM $this->table WHERE LOWER(isocode) = LOWER(?)";
+      $query = "SELECT * FROM $this->table WHERE LOWER(name) = LOWER(?) OR LOWER(isocode) = LOWER(?)";
       try {
           $stmt = $mysqli->prepare($query);
-          $stmt->bind_param('s', $this->languageCode);
+          $stmt->bind_param('ss', $this->languageName, $this->languageCode);
           $stmt->execute();
           $result = $stmt->get_result();
 

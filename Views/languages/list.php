@@ -51,7 +51,7 @@
                 <div class="d-flex justify-content-center gap-2" role="group" aria-label="Acciones">
                   <a class="btn btn-success" href="editLanguage.php?id=<?= $actor->getLanguageId() ?>">Editar</a>
 
-                  <form name="deleteLanguage" action="deleteLanguage.php" method="POST">
+                  <form name="delete_form" action="deleteLanguage.php" method="POST">
                     <input type="hidden" name="languajeId" value="<?= $actor->getLanguageId() ?>">
                     <button type="submit" class="btn btn-danger">Borrar</button>
                   </form>
@@ -76,5 +76,12 @@
 
   <!-- Footer-->
   <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/footer.php';?>
+
+  <script src='/BibliotecaSeries/includes/confirmDelete.js'></script>
+  <script>
+      // Attach the confirmDelete function to the form's submit event
+      document.forms["delete_form"].addEventListener("submit", confirmDelete);
+  </script>
+
 </body>
 </html>
