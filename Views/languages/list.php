@@ -25,7 +25,7 @@
   <div class="container text-center mt-5 content" >
     <h1 class="display-3">Lista de idiomas</h1>
     <div class="row">
-        <div class="col text-end mt-4">
+        <div class="col text-start mt-4 mb-3">
             <a class="btn btn-primary px-5" href="createLanguage.php">Crear</a>
         </div>
     </div>
@@ -37,7 +37,7 @@
           </div>
     <?php endif; ?>
     <!-- ############# -->
-    <table class="table table-striped table-hover">
+    <table class="table table-hover">
       <thead>
         <tr>
           <th>

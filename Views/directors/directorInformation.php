@@ -22,23 +22,31 @@ $directorInformation = getDirector($directorId, true);$seriesList = listSeriesBy
         <h1 class="mb-5 mt-5">
           Información <?= $directorInformation->getFirstName().' '.$directorInformation->getLastName() ?>
         </h1>
-        <section class="d-flex flex-column justify-content-start w-100">
-          <p>
-            <strong>Nombre: </strong> <span><?= $directorInformation->getFirstName() ?></span>
-          </p>
-          <p>
-          <strong>Apellidos: </strong> <span><?= $directorInformation->getLastName() ?></span>
-          </p>
-          <p>
-          <strong>Fecha de nacimiento: </strong> <span><?= $directorInformation->getBirthDate() ?></span>
-          </p>
-          <p>
-          <strong>Nacionalidad: </strong> <span><?= $directorInformation->getNationality() ?></span>
-          </p>
+        <section class="d-flex flex-column justify-content-start align-items-center w-100">
+          <table class="table table-hover border-2 rounded-2 w-50">
+            <tbody>
+              <tr>
+                <td><strong>Nombre: </strong></td>
+                <td><?= $directorInformation->getFirstName() ?></td>
+              </tr>
+              <tr>
+                <td><strong>Apellidos: </strong></td>
+                <td><?= $directorInformation->getLastName() ?></td>
+              </tr>
+              <tr>
+                <td><strong>Fecha de nacimiento: </strong></td>
+                <td><?= $directorInformation->getBirthDate() ?></td>
+              </tr>
+              <tr>
+                <td><strong>Nacionalidad: </strong></td>
+                <td><?= $directorInformation->getNationality() ?></td>
+              </tr>
+            </tbody>
+          </table>
         </section>
       </div>
-      <section class="w-100 justify-content-center mb-10">
-        <table class="table table-striped table-hover border-2 rounded-2">
+      <section class="d-flex w-100 justify-content-center mb-10 mt-5">
+        <table class="table table-hover border-2 w-50">
           <thead class="border rounded-top">
             <tr>
               <th>Series</th>

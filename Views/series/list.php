@@ -41,7 +41,7 @@ if (isset($_GET["id"])){
 
         <!-- Link to create View -->
         <div class="row">
-            <div class="col text-start">
+            <div class="col text-start mb-3">
                 <a class="btn btn-primary px-5" href="create.php">Crear</a>
             </div>
         </div>
@@ -62,7 +62,7 @@ if (isset($_GET["id"])){
                 if (is_array($seriesList) && count($seriesList) > 0) {
                 ?>
                     <!-- IF data exists -->
-                    <table class="table table-striped table-hover">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>Id</th>
@@ -74,7 +74,7 @@ if (isset($_GET["id"])){
                         <tbody>
                         <?php foreach ($seriesList as $series) {?>
                             <tr>
-                                
+
                                 <td><?php echo $series->getId ()?> </td>
                                 <td><?php echo $series->getTitle () ?> </td>
                                 <td><?php

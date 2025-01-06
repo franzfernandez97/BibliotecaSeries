@@ -16,35 +16,39 @@ try{
     <title>List a Platform</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> -->
+
+
 </head>
 <body>
-    <!-- Nav Bar-->  
-    <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/navbar.php';?> 
+    <!-- Nav Bar-->
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/navbar.php';?>
 
     <div class="container text-center mt-5 content">
         <h1 class="display-3">Lista de Plataformas</h1>
-    
+
         <!-- Link to create View -->
         <div class="row">
-            <div class="col text-start">
+            <div class="col text-start mb-3">
                 <a class="btn btn-primary px-5" href="create.php">Crear</a>
-            </div> 
+            </div>
         </div>
-            
-    <!-- Capture Error -->
-    <?php if(is_string($plataformList)): ?>
-          <div class='alert alert-danger' role='alert'>
-            <p><?= $plataformList ?></p>
-            <?php die; ?>
-          </div>
-    <?php endif; ?>
-    <!-- ############# -->
 
-    <?php if (is_array($plataformList) && count($plataformList) > 0) {
+      <!-- Capture Error -->
+      <?php if(is_string($plataformList)): ?>
+            <div class='alert alert-danger' role='alert'>
+              <p><?= $plataformList ?></p>
+              <?php die(); ?>
+            </div>
+            <?php endif; ?>
+            <!-- ############# -->
+
+      <?php if (is_array($plataformList) && count($plataformList) > 0) {
                 ?>
                     <!-- IF data exists -->
-                    <table class="table table-striped table-hover">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -65,7 +69,7 @@ try{
                                         <button type="submit" class="btn btn-danger">Borrar</button>
                                     </form>
                                     <a class="btn btn-primary" href="/BibliotecaSeries/views/series/list.php?id=<?=$platform->getId() ?>">Ver</a>
-                                </div>    
+                                </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -77,11 +81,10 @@ try{
                     No data found.
                     </div>
                 <?php } ?>
-            </div>
     </div>
 
-    <!-- Footer-->  
-    <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/footer.php';?> 
+    <!-- Footer-->
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/footer.php';?>
 
     <!-- Import the confirmDelete.js file -->
     <script src="/BibliotecaSeries/includes/confirmDelete.js"></script>
