@@ -3,11 +3,23 @@
 require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/seriesController.php';
 require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/platformsController.php';
 
+
 try{
 $seriesList = listSeries();
 } catch (Exception $error){
     $seriesList = $error->getMessage();
 }
+
+//check if you must filter series List
+if (isset($_GET["id"])){
+    foreach ($seriesList as $key => $series) {
+        if ((int)$series->getPlatformId() !== (int)$_GET["id"]) {
+            unset($seriesList[$key]); // Remove the series object if the condition is met
+        }
+    }
+    $seriesList = array_values($seriesList);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -62,11 +74,24 @@ $seriesList = listSeries();
                         <tbody>
                         <?php foreach ($seriesList as $series) {?>
                             <tr>
+                                
                                 <td><?php echo $series->getId ()?> </td>
                                 <td><?php echo $series->getTitle () ?> </td>
                                 <td><?php
-                                $platformObjt = getPlatformData((int)$series->getPlatformId());
-                                echo $platformObjt->getName() ?> </td>
+                                    try{
+                                    $platformObjt = getPlatformData((int)$series->getPlatformId());
+                                } catch (Exception $error){
+                                    $platformObjt = $error->getMessage();
+                                }?>
+                                <!-- Capture Error -->
+                                <?php if(is_string($platformObjt)): ?>
+                                    <div class='alert alert-danger' role='alert'>
+                                        <p><?= $platformObjt ?></p>
+                                        <?php die; ?>
+                                    </div>
+                                <?php endif; ?>
+                                <!-- ############# -->
+                                <?php echo $platformObjt->getName() ?> </td>
                                 <td>
                                     <div class="d-flex justify-content-center gap-2" role="group" aria-label="Acciones">
                                         <a class= "btn btn-success" href="edit.php?id=<?php echo $series->getId(); ?>">Editar</a>

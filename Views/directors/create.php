@@ -27,7 +27,7 @@
         <?php
         // initial state before execution
         $sendData = false;
-        $directorCreated = false;
+        //$directorCreated = false;
 
         // If the buttom -Create- was clic
         // then sendData is true
@@ -42,7 +42,7 @@
                 $directorCreated = createDirector(firstName: $_POST["firstName"], lastName: $_POST["lastName"], birthDate: $_POST["birthDate"], nationality: $_POST["nationality"]);
             }
 
-            if (!empty($_POST['series']) && is_array($_POST['series'])) {
+            if (!empty($_POST['series']) && is_array($_POST['series']) && is_int($directorCreated)) {
                 $seriesSelected = $_POST['series']; // Aquí tienes todas las
                 $seriesId = [];
                 // Ejemplo: Mostrar los valores seleccionados
@@ -62,7 +62,8 @@
         <!-- Link to create View -->
         <div class="row justify-content-center w-100">
             <div class="w-50 align-items-center mb-10"> <!-- Adjust column width for better alignment -->
-                <form  action="create.php" class="d-flex flex-column mb-10" method="POST">
+<!DOCTYPE html>
+                <form  action="create.php" class="d-flex flex-column mb-10" method="POST" onsubmit="return validarCombo()">
                     <div class="mb-3 d-flex flex-column align-items-start">
                         <label for="firstName" class="form-label">Nombre</label>
                         <input id="firstName" name="firstName" type="text" class="form-control" placeholder="Introduce un nombre" value="" required>
@@ -106,21 +107,30 @@
 
         }else{
             //if the createPlatform was succesfully executed
-            if ($directorCreated){
-    ?>
-            <div class='alert alert-success' role='alert'>
-                ¡El director fue creado con éxito! <a href='list.php'>Volver al listado de directores.</a>
-            </div>
-    <?php
-            } else {
-                // ElseWarning Message
-    ?>
-                <div class='alert alert-danger' role='alert'>
-                    ¡Director no ha sido creado ! ya existe en la DB. Por favor ingrese otro nombre <a href='create.php'>Refrescar.</a>
-                </div>
-    <?php
-            }
+            if ($directorCreated && is_string($directorCreated)){
+                ?>
+                    <div class='alert alert-danger' role='alert'>
+                        <?= $directorCreated ?> <a href='create.php'>Refrescar.</a>
+                    </div>
+                <?php
+                    } else {// ElseWarning Message
+                ?>
+                    <div class='alert alert-success' role='alert'>
+                        ¡El actor fue creado con éxito! <a href='list.php'>Volver al listado de actores.</a>
+                    </div>;
+                <?php
+                }
         }
     ?>
 </body>
 </html>
+<script>
+    function validarCombo() {
+        var combo = document.getElementById('series');
+        if (combo.value === "0") {
+            alert("Debes seleccionar una serie.");
+            return false; // No permite que el formulario se envíe
+        }
+        return true; // Permite que el formulario se envíe
+    }
+</script>

@@ -139,7 +139,6 @@
       }
       $stmt->close();
       $mysqli->close();
-
       return $result ? true : false;
   }
 

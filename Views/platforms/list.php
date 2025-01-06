@@ -58,11 +58,14 @@ try{
                                 <td><?php echo $platform->getId ()?> </td>
                                 <td><?php echo $platform->getName () ?> </td>
                                 <td>
+                                <div class="d-flex justify-content-center gap-2" role="group" aria-label="Acciones">
                                     <a class= "btn btn-success" href="edit.php?id=<?php echo $platform->getId(); ?>">Editar</a>
                                     <form name="delete_form" action="delete.php" method="POST" style="display:inline;">
                                         <input type="hidden" name="platformId" value="<?php echo $platform->getId()?>">
                                         <button type="submit" class="btn btn-danger">Borrar</button>
                                     </form>
+                                    <a class="btn btn-primary" href="/BibliotecaSeries/views/series/list.php?id=<?=$platform->getId() ?>">Ver</a>
+                                </div>    
                                 </td>
                             </tr>
                         </tbody>
