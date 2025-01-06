@@ -106,7 +106,6 @@
 
         }else{
             //if the createPlatform was succesfully executed
-            //if the createPlatform was succesfully executed
             if ($directorCreated && is_string($directorCreated)){
                 ?>
                     <div class='alert alert-danger' role='alert'>

@@ -90,13 +90,12 @@ class Directors {
     public function create(){
         //$directorCreated = false;
         $mysqli = Database::getDbConnection();
-        $dupli = new Actors();
         if(is_string($mysqli)){
           throw new Exception("Error al conectar con la base de datos: ". $mysqli);
         }
 
         try {
-          $resultDuplicate = $dupli->getDuplicate();
+          $resultDuplicate = $this->getDuplicate();
           if ($resultDuplicate){
             throw new Exception("El actor ya existe");
           }
@@ -119,47 +118,62 @@ class Directors {
 
     // UPDATE: Update an existing Directors by ID
     public function update() {
-        $directorUpdated = false;
-        $mysqli = Database::getDbConnection();
-  
-        // Prepare the update statement to prevent SQL injection
+      $mysqli = Database::getDbConnection();
+      if(is_string($mysqli)){
+        throw new Exception("Error al conectar con la base de datos: ". $mysqli);
+      }
+      try {
         $stmt = $mysqli->prepare("UPDATE $this->table SET firstname=?,lastname=?,birthdate=?,nationality=? WHERE id = ?");
         $stmt->bind_param("ssssi", $this->firstName, $this->lastName, $this->birthDate, $this->nationality, $this->directorId);
-  
-        // Execute the statement
-        if ($stmt->execute()) {
-            // Check if any row was affected (i.e., if the update was successful)
-            if ($stmt->affected_rows > 0) {
-                $directorUpdated = true;
-            }
-        }
-        $stmt->close();
-        $mysqli->close();
-  
-        return $directorUpdated;
-    }
-    
-    // DELETE: Delete a Directors by ID
-    public function delete(){
-      $deleted = false;
-      $mysqli = Database::getDbConnection();
-  
-      //prepate statement to Prevent sql injection
-      $stmt = $mysqli->prepare("DELETE FROM $this->table WHERE id = ?");
-      $stmt->bind_param("i", $this->directorId);
-  
-      //execute the statement
-      if ($stmt->execute()){
-          //check rows
-          if($stmt->affected_rows > 0){
-              $deleted = true; //record succesfully deleted
-          }
+        $stmt->execute();
+        $result = $stmt->get_result();
+      }catch(Exception $error) {
+        throw new Exception("Error al editar el director: ". $error->getMessage());
       }
-      // Close the statement and connection
       $stmt->close();
       $mysqli->close();
-  
-      return $deleted;
+      return $result ? true : false;
+  }
+    
+  public function delete(){
+    $mysqli = Database::getDbConnection();
+    if(is_string($mysqli)){
+      throw new Exception("Error al conectar con la base de datos: ". $mysqli);
+    }
+    try {
+      $stmt = $mysqli->prepare("DELETE FROM $this->table WHERE id = ?");
+      $stmt->bind_param("i", $this->directorId);
+      $result = $stmt->execute();
+      $stmt->close();
+      $mysqli->close();
+      return $result ? true : false;
+    }catch(Exception $error) {
+      throw new Exception("Error al borrar el director: ". $error->getMessage());
+    }
+  }
+
+    public function getDuplicate() {
+      $mysqli = Database::getDbConnection();
+      if(is_string($mysqli)){
+        throw new Exception("Error al conectar con la base de datos: ". $mysqli);
+      }
+      $query = "SELECT * FROM $this->table WHERE LOWER(firstname) = LOWER(?) AND LOWER(lastname) = LOWER(?)";
+      try {
+        $stmt = $mysqli->prepare($query);
+        $stmt->bind_param("ss", $this->firstName,$this->lastName);
+        $stmt->execute();
+        $result = $stmt->get_result();
+      }catch (Exception $error) {
+        throw new Exception("Error al tratar de hacer la consulta: " . $error->getMessage());
+      }
+      if ($result->num_rows > 0){
+        $stmt->close();
+        $mysqli->close();
+        return true;
+      }
+      $stmt->close();
+      $mysqli->close();
+      return false;
     }
   
     }

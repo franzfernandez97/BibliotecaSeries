@@ -118,21 +118,22 @@
     //and this message can be positive or negative
 
         }else{
+
             //if the createPlatform was succesfully executed
-            if ($directorCreated){
-    ?>
-            <div class='alert alert-success' role='alert'>
-                ¡El director fue editado con éxito! <a href='list.php'>Volver al listado de plataformas.</a>
-            </div>
-    <?php
-            } else {
-                // ElseWarning Message
-    ?>
-                <div class='alert alert-danger' role='alert'>
-                    Director no ha sido editado ! ya existe en la DB. Por favor ingrese otro nombre <a href='list.php'>Refrescar.</a>
-                </div>
-    <?php
-            }
+            if ($directorCreated && is_string($directorCreated)){
+                ?>
+                        <div class='alert alert-danger' role='alert'>
+                            <?= $directorCreated ?> <a href='edit.php'>Refrescar.</a>
+                        </div>
+                <?php
+                        } else {
+                            // ElseWarning Message
+                ?>
+                          <div class='alert alert-success' role='alert'>
+                            ¡El director fue editado con éxito! <a href='list.php'>Volver al listado de directores.</a>
+                          </div>;
+                <?php
+                        }
         }
     ?>
 </body>
