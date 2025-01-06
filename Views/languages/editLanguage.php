@@ -118,7 +118,7 @@
                       </select>
                     </div>
                     <!-- Submit button inside the form -->
-                    <input type="submit" value="Crear" class="btn btn-primary" name="editButton">
+                    <input type="submit" value="Editar" class="btn btn-primary" name="editButton">
                 </form>
             </div>
         </div>
@@ -142,7 +142,7 @@
                 // ElseWarning Message
     ?>
               <div class='alert alert-success' role='alert'>
-                ¡El lenguaje fue creado con éxito! <a href='list.php'>Volver al listado de idiomas.</a>
+                ¡El idioma fue creado con éxito! <a href='list.php'>Volver al listado de idiomas.</a>
               </div>
     <?php
           }

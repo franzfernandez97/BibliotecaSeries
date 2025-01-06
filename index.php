@@ -38,7 +38,7 @@
             </div>
             <!-- Button 5 -->
             <div class="col-md-6">
-                <a href="views\lenguages\list.php" class="btn btn-primary btn-lg w-100">Idiomas</a>
+                <a href="views\languages\list.php" class="btn btn-primary btn-lg w-100">Idiomas</a>
                 <p class="mt-2">Listado y gestión de idiomas</p>
             </div>
         </div>

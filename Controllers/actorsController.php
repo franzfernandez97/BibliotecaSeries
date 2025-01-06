@@ -49,6 +49,9 @@
   }
   function updateActor ($actorId, $firstName, $lastName, $birthDate, $nationality){
     $model = new Actors(actorId: $actorId, firstName: $firstName, lastName: $lastName, birthDate: $birthDate, nationality: $nationality);
+    if (!textValidation($firstName) || !textValidation($lastName) || !dateValidation($birthDate) || !textValidation($nationality)) {
+      return "Error funcion createSerie: Los parametros no pueden ser numeros ni caracteres especiales.";
+    }
     try {
       $isEdited = $model->updateActor();
     }catch (Exception $error) {

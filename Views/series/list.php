@@ -27,7 +27,7 @@ if (isset($_GET["id"])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>List a Series</title>
+    <title>Lista Series</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -54,11 +54,11 @@ if (isset($_GET["id"])){
             </div>
         <?php endif; ?>
         <!-- ############# -->
-            
+
             <!-- Table series Data -->
             <div class="row mt-4">
                 <?php
-                
+
                 if (is_array($seriesList) && count($seriesList) > 0) {
                 ?>
                     <!-- IF data exists -->
@@ -67,7 +67,7 @@ if (isset($_GET["id"])){
                             <tr>
                                 <th>Id</th>
                                 <th>Nombre</th>
-                                <th>Id Plataforma</th>
+                                <th>Plataforma</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -100,7 +100,7 @@ if (isset($_GET["id"])){
                                             <button type="submit" class="btn btn-danger">Borrar</button>
                                         </form>
                                         <a class="btn btn-primary" href="serieInformation.php?id=<?=$series->getId() ?>">Ver</a>
-                                    </div>    
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>

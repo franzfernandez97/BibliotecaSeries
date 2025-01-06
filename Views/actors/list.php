@@ -23,6 +23,12 @@
             <a class="btn btn-primary px-5" href="createActors.php">Crear</a>
         </div>
     </div>
+    <?php if(is_string($actorList)): ?>
+          <div class='alert alert-danger' role='alert'>
+            <p><?= $actorList ?></p>
+          </div>
+          <?php die; ?>
+    <?php endif; ?>
     <table class="table table-striped table-hover">
       <thead>
         <tr>

@@ -15,10 +15,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Nav Bar-->  
-    <?php include '..\..\includes\navbar.php';?> 
-    
-    <!-- Main Info-->  
+    <!-- Nav Bar-->
+    <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/navbar.php';?>
+
+    <!-- Main Info-->
     <div class="container text-center mt-5 content">
         <h1 class="display-3">Eliminar Director</h1>
     <?php
@@ -33,10 +33,10 @@
         <div class='alert alert-success' role='alert'>
             Director borrado correctamente! <a href='list.php'>Volver al listado de directores.</a>
         </div>
-    <?php            
+    <?php
     } else {
             // Else Warning Message
-    ?>                        
+    ?>
         <div class='alert alert-danger' role='alert'>
             Director no ha sido borrado! <a href='list.php'>Por favor vuelve a intentarlo.</a>
         </div>

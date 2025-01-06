@@ -17,7 +17,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Nav Bar-->  
+    <!-- Nav Bar-->
     <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/navbar.php';?>
 
     <!-- Main Info-->
@@ -97,7 +97,8 @@
             </div>
         </div>
         <!-- Footer-->
-        <?php include '..\..\includes\footer.php';?> 
+        <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/footer.php';?>
+
     </div>
 
     <?php

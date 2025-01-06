@@ -109,6 +109,78 @@ class LanguageSeries {
     $mysqli->close();
     return $series;
   }
+  public function getSeriesAudio(){
+    $mysqli = Database::getDbConnection();
+    if(is_string($mysqli)){
+      throw new Exception("Error al conectar con la base de datos: ". $mysqli);
+    }
+    $query = "SELECT
+                series.id AS serieId,
+                series.title AS serieTitle,
+                series.platformid AS seriesPlatform
+                FROM
+                  $this->table
+                LEFT JOIN
+                  series ON languages_series.idserie = series.id
+                WHERE
+                  languages_series.idlanguage = ?
+                  AND
+                  languages_series.languagestype = 'audio'" ;
+    try {
+      $stmt = $mysqli->prepare($query);
+      $stmt->bind_param("i", $this->languageId);
+      $stmt->execute();
+      $result = $stmt->get_result();
+    }catch (Exception $error) {
+      throw new Exception("Error al tratar de hacer la consulta: " . $error->getMessage());
+    }
+    $series = [];
+    if ($result->num_rows > 0) {
+      foreach ($result as $item){
+        $itemObject = new Series(idSeries: $item['serieId'], titleSeries: $item['serieTitle'], idPlatform: $item['seriesPlatform']);
+        array_push($series,$itemObject);
+      }
+    }
+    $stmt->close();
+    $mysqli->close();
+    return $series;
+  }
+  public function getSeriesSubtitle(){
+    $mysqli = Database::getDbConnection();
+    if(is_string($mysqli)){
+      throw new Exception("Error al conectar con la base de datos: ". $mysqli);
+    }
+    $query = "SELECT
+                series.id AS serieId,
+                series.title AS serieTitle,
+                series.platformid AS seriesPlatform
+                FROM
+                  $this->table
+                LEFT JOIN
+                  series ON languages_series.idserie = series.id
+                WHERE
+                  languages_series.idlanguage = ?
+                  AND
+                  languages_series.languagestype = 'subtitle'" ;
+    try {
+      $stmt = $mysqli->prepare($query);
+      $stmt->bind_param("i", $this->languageId);
+      $stmt->execute();
+      $result = $stmt->get_result();
+    }catch (Exception $error) {
+      throw new Exception("Error al tratar de hacer la consulta: " . $error->getMessage());
+    }
+    $series = [];
+    if ($result->num_rows > 0) {
+      foreach ($result as $item){
+        $itemObject = new Series(idSeries: $item['serieId'], titleSeries: $item['serieTitle'], idPlatform: $item['seriesPlatform']);
+        array_push($series,$itemObject);
+      }
+    }
+    $stmt->close();
+    $mysqli->close();
+    return $series;
+  }
   public function deleteLanguageRelationship() {
     $mysqli = Database::getDbConnection();
     if(is_string($mysqli)){
