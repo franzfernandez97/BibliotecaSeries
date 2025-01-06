@@ -12,22 +12,22 @@
     <title>Lista de Directores</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
 </head>
 <body>
-    <!-- Nav Bar-->  
-    <?php include '..\..\includes\navbar.php';?> 
+    <!-- Nav Bar-->
+    <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/navbar.php';?>
 
     <div class="container text-center mt-5 content">
         <h1 class="display-3">Lista de Directores</h1>
-    
+
         <!-- Link to create View -->
         <div class="row">
             <div class="col text-start">
                 <a class="btn btn-primary px-5" href="create.php">Crear</a>
-            </div> 
+            </div>
         </div>
-            
+
             <!-- Table Platform Data -->
             <div class="row mt-4">
                 <?php
@@ -77,11 +77,11 @@
             </div>
     </div>
 
-    <!-- Footer-->  
-    <?php include '..\..\includes\footer.php';?> 
+    <!-- Footer-->
+    <?php include $_SERVER['DOCUMENT_ROOT']. '/BibliotecaSeries/includes/footer.php';?>
 
     <!-- Import the confirmDelete.js file -->
-    <script src="..\..\includes\confirmDelete.js"></script>
+    <script src="/BibliotecaSeries/includes/confirmDelete.js"></script>
     <script>
         // Attach the confirmDelete function to the form's submit event
         document.forms["delete_form"].addEventListener("submit", confirmDelete);

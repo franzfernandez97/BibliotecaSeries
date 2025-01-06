@@ -6,7 +6,7 @@
   } catch (Exception $error){
     $languagesList = $error->getMessage();
   }
-  
+
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +44,7 @@
             Id
           </th>
           <th>
-            Nombres
+            Idioma
           </th>
           <th>
             Código ISO
@@ -74,10 +74,10 @@
               </td>
             </tr>
           <?php endforeach; ?>
-        
+
         <?php else: ?>
           <tr>
-            <td colspan="6">No hay lenguajes</td>
+            <td colspan="6">No hay idiomas</td>
           </tr>
         <?php endif; ?>
       </tbody>

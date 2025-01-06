@@ -46,7 +46,7 @@
         if (isset($sendData)){
             //Check if POST variable platformName was assigned to create a platform
             if (isset($_POST["firstName"]) && isset($_POST["lastName"]) && isset($_POST["birthDate"]) && isset($_POST["nationality"])){
-                $platformCreated = updateActor(actorId: $actorId,firstName: $_POST["firstName"], lastName: $_POST["lastName"], birthDate: $_POST["birthDate"], nationality: $_POST["nationality"]);
+                $actorEdited = updateActor(actorId: $actorId,firstName: $_POST["firstName"], lastName: $_POST["lastName"], birthDate: $_POST["birthDate"], nationality: $_POST["nationality"]);
             }
 
 
@@ -107,7 +107,7 @@
                     </div>
 
                     <!-- Submit button inside the form -->
-                    <input type="submit" value="Crear" class="btn btn-primary" name="editButton">
+                    <input type="submit" value="Editar" class="btn btn-primary" name="editButton">
                 </form>
             </div>
         </div>
@@ -119,23 +119,23 @@
     //If the user clicked the Create buttom is going to see a message
     //and this message can be positive or negative
 
-        }else{
-            //if the createPlatform was succesfully executed
-            if ($platformCreated){
-    ?>
-            <div class='alert alert-success' role='alert'>
-                ¡El actor fue creado con éxito! <a href='list.php'>Volver al listado de plataformas.</a>
-            </div>
-    <?php
-            } else {
-                // ElseWarning Message
-    ?>
-                <div class='alert alert-danger' role='alert'>
-                    ¡Plataforma no ha sido creada ! ya esxiste en la DB. Por favor ingrese otro nombre <a href='createActors.php'>Refrescar.</a>
-                </div>
-    <?php
-            }
-        }
-    ?>
+  }else{
+    //if the createlanguage was succesfully executed
+    if (is_string($actorEdited)) {
+?>
+    <div class='alert alert-danger' role='alert'>
+          <p><?= $actorEdited ?></p><a href='createLanguage.php'> Volver a intentar.</a>
+      </div>
+<?php
+    } else{
+        // ElseWarning Message
+?>
+      <div class='alert alert-success' role='alert'>
+        ¡El actor fue editado con éxito! <a href='list.php'>Volver al listado de actores.</a>
+      </div>
+<?php
+  }
+}
+?>
 </body>
 </html>

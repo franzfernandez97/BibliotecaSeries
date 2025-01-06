@@ -35,4 +35,22 @@
       return $error->getMessage();
     }
   }
+  function getSeriesAudio($languageId) {
+    $model = new LanguageSeries(languageId: $languageId);
+    try {
+      $result = $model->getSeriesAudio();
+      return $result;
+    }catch (Exception $error) {
+      return $error->getMessage();
+    }
+  }
+  function getSeriesSubtitle($languageId) {
+    $model = new LanguageSeries(languageId: $languageId);
+    try {
+      $result = $model->getSeriesSubtitle();
+      return $result;
+    }catch (Exception $error) {
+      return $error->getMessage();
+    }
+  }
 ?>
