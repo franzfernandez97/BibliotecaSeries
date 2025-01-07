@@ -7,26 +7,27 @@ INSERT INTO platforms (name) VALUES ('Apple TV');
 
 
 -- Inserta Series
-INSERT INTO series (title, platformid) VALUES ("Breaking Bad", 1);
-INSERT INTO series (title, platformid) VALUES ("Stranger Things", 2);
-INSERT INTO series (title, platformid) VALUES ("The Witcher", 3);
-INSERT INTO series (title, platformid) VALUES ("Game of Thrones", 4);
-INSERT INTO series (title, platformid) VALUES ("The Mandalorian", 5);
-INSERT INTO series (title, platformid) VALUES ("The Boys", 1);
-INSERT INTO series (title, platformid) VALUES ("Friends", 2);
-INSERT INTO series (title, platformid) VALUES ("The Office", 3);
-INSERT INTO series (title, platformid) VALUES ("Sherlock", 4);
-INSERT INTO series (title, platformid) VALUES ("Dark", 5);
-INSERT INTO series (title, platformid) VALUES ("Hannibal", 1);
-INSERT INTO series (title, platformid) VALUES ("Mindhunter", 2);
-INSERT INTO series (title, platformid) VALUES ("The Crown", 3);
-INSERT INTO series (title, platformid) VALUES ("Peaky Blinders", 4);
-INSERT INTO series (title, platformid) VALUES ("Black Mirror", 5);
-INSERT INTO series (title, platformid) VALUES ("House of Cards", 1);
-INSERT INTO series (title, platformid) VALUES ("Vikings", 2);
-INSERT INTO series (title, platformid) VALUES ("The Walking Dead", 3);
-INSERT INTO series (title, platformid) VALUES ("Narcos", 4);
-INSERT INTO series (title, platformid) VALUES ("Better Call Saul", 5);
+INSERT INTO series (title, synopsis, platformid) VALUES 
+("Breaking Bad", "A high school chemistry teacher turns to cooking meth to secure his family’s future after a terminal diagnosis.", 1),
+("Stranger Things", "A group of kids uncover supernatural forces and secret experiments while searching for their missing friend.", 2),
+("The Witcher", "A monster hunter navigates a world of dangerous creatures, politics, and destiny.", 3),
+("Game of Thrones", "Noble families vie for control of the Iron Throne in a land of dragons and intrigue.", 4),
+("The Mandalorian", "A bounty hunter embarks on adventures in the Star Wars galaxy while protecting a mysterious child.", 5),
+("The Boys", "A group of vigilantes fight against corrupt superheroes who abuse their powers.", 1),
+("Friends", "Six friends navigate life, love, and laughter in New York City.", 2),
+("The Office", "A mockumentary exploring the lives of employees at Dunder Mifflin, a paper company.", 3),
+("Sherlock", "A modern take on the famous detective and his adventures solving crimes in London.", 4),
+("Dark", "A small town is plagued by a time-travel conspiracy that spans several generations.", 5),
+("Hannibal", "A psychiatrist and a criminal profiler form a complex and dangerous relationship.", 1),
+("Mindhunter", "FBI agents develop criminal profiling techniques by interviewing serial killers.", 2),
+("The Crown", "A dramatization of the reign of Queen Elizabeth II and the events that shaped modern Britain.", 3),
+("Peaky Blinders", "A gangster family in post-WWI Birmingham fights to expand their criminal empire.", 4),
+("Black Mirror", "An anthology series that examines the dark side of modern technology.", 5),
+("House of Cards", "A ruthless politician and his wife manipulate their way to power in Washington, D.C.", 1),
+("Vikings", "The legendary Norse hero Ragnar Lothbrok rises to power through raids and alliances.", 2),
+("The Walking Dead", "Survivors of a zombie apocalypse struggle to stay alive and find hope.", 3),
+("Narcos", "The rise and fall of Colombian drug lord Pablo Escobar and the Medellín Cartel.", 4),
+("Better Call Saul", "The origin story of Jimmy McGill, a con artist turned lawyer, before becoming Saul Goodman.", 5);
 
 
 -- Inserta Actores
