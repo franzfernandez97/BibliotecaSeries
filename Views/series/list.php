@@ -7,7 +7,7 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/platformsC
 try{
 $seriesList = listSeries();
 } catch (Exception $error){
-    $seriesList = $error->getMessage();
+  $seriesList = $error->getMessage();
 }
 
 //check if you must filter series List
