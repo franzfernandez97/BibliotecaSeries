@@ -15,13 +15,13 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/platformsC
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Nav Bar-->  
-    <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/navbar.php';?> 
-    
-    <!-- Main Info-->  
+    <!-- Nav Bar-->
+    <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/navbar.php';?>
+
+    <!-- Main Info-->
     <div class="container text-center mt-5 content">
         <h1 class="display-3">Editar Series </h1>
-        <?php 
+        <?php
             $idSerie = $_GET['id'];
             try{
                 $serieObject = getSerieData((int)$idSerie);
@@ -55,7 +55,7 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/platformsC
                         $serieEdited = $error->getMessage();
                     }
                 ?>
-        
+
                 <!-- Capture Error -->
                 <?php if(is_string($serieEdited)): ?>
                         <div class='alert alert-danger' role='alert'>
@@ -65,7 +65,7 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/platformsC
                 <?php endif; ?>
                 <!-- ############# -->
                 <?php
-                }  
+                }
             }
 
             if(!$sendData){
@@ -128,27 +128,26 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/platformsC
             </div>
         </div>
     </div>
-    
-    <?php // if the user inserted values 
+
+    <?php // if the user inserted values
     } else {
-        
+
         if ($serieEdited) {
-    ?>  
+    ?>
             <div class='alert alert-success' role='alert'>
-            ¡Plataforma editada con éxito!  <a href='list.php'>Volver al listado de plataformas.</a>
+            ¡Serie editada con éxito!  <a href='list.php'>Volver al listado de series.</a>
             </div>
 
-    <?php            
+    <?php
             } else {
-                // Warning Message
-    ?>                        
+    ?>
                 <div class='alert alert-danger' role='alert'>
-                    ¡Plataforma no se ha editado!  <a href='edit.php?id=<?php echo $_POST["serieId"]?>'>Refrescar.</a>
+                    ¡La serie no se ha editado!  <a href='edit.php?id=<?php echo $_POST["serieId"]?>'>Refrescar.</a>
                 </div>
     <?php
             }
         }
     ?>
-     <!-- Footer-->  
-     <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/footer.php'?> 
+     <!-- Footer-->
+     <?php include $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/includes/footer.php'?>
 </body>
