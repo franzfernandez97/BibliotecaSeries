@@ -1,7 +1,7 @@
 <?php
 require_once "../../models/seriesModel.php";
 function validacionTextoSerie($input) {
-    return preg_match('/^(?!\s)[\p{L}]+(?:[\p{L}\s+-]+)*$/u', $input);
+    return preg_match('/^(?!\s)[\p{L}\p{N}\s\.\-\+]+$/u', $input);
 }
 function listSeries(): array|string{
     //check no arguments were used
@@ -17,15 +17,15 @@ function listSeries(): array|string{
     return $seriesList;
 }
 
-function createSerie ($titleSerie,$idSerie){
+function createSerie ($titleSerie,$idSerie,$synopsisSerie){
     //check if pass different arguments than 1
-    if (func_num_args() !== 2) {
-        throw new InvalidArgumentException("Error funcion createSerie: requiere exactamente 1 parametro.");
+    if (func_num_args() !== 3) {
+        throw new InvalidArgumentException("Error funcion createSerie: requiere exactamente 3 parametro.");
     }
 
     // the argument is not string?
     if (!is_string($titleSerie) || !validacionTextoSerie($titleSerie)) {
-        throw new InvalidArgumentException("Error funcion createSerie: parametro titleSerie debe ser una cadena (string).");
+        throw new InvalidArgumentException("Error funcion createSerie: parametro titleSerie debe ser una cadena (string) valida.");
     }
 
     // the argument is not int?
@@ -33,7 +33,12 @@ function createSerie ($titleSerie,$idSerie){
         throw new InvalidArgumentException("Error funcion createSerie: parametro idSerie debe ser un int.");
     }
 
-    $newSerie = new Series(null, $titleSerie,$idSerie);
+    // is $synopsisSerie a string?
+    if (!is_string($synopsisSerie) || !validacionTextoSerie($synopsisSerie)) {
+        throw new InvalidArgumentException("Error funcion updateSerie: parametro 'synopsisSerie' debe ser una cadena (string) valida sin caracteres especiales.");
+    }
+
+    $newSerie = new Series(null, $titleSerie,$idSerie,$synopsisSerie);
     try{
         $isCreated = $newSerie->create();
     }catch (Exception $error) {
@@ -42,10 +47,10 @@ function createSerie ($titleSerie,$idSerie){
     return $isCreated ;
 }
 
-function updateSerie ($idSerie, $titleSerie, $idPlatform){
+function updateSerie ($idSerie, $titleSerie, $idPlatform, $synopsisSerie){
     //check if pass different arguments than 1
-    if (func_num_args() !== 3) {
-        throw new InvalidArgumentException("Error funcion updateSerie: requiere exactamente 3 parametros.");
+    if (func_num_args() !== 4) {
+        throw new InvalidArgumentException("Error funcion updateSerie: requiere exactamente 4 parametros.");
     }
 
     // is $idSerie an INT?
@@ -60,9 +65,15 @@ function updateSerie ($idSerie, $titleSerie, $idPlatform){
 
     // is $titleSerie a string?
     if (!is_string($titleSerie) || !validacionTextoSerie($titleSerie)) {
-        throw new InvalidArgumentException("Error funcion updateSerie: parametro 'namePlatform' debe ser una cadena (string).");
+        throw new InvalidArgumentException("Error funcion updateSerie: parametro 'namePlatform' debe ser una cadena (string) valida.");
     }
-    $model = new Series($idSerie, $titleSerie, $idPlatform);
+
+    // is $synopsisSerie a string?
+    if (!is_string($synopsisSerie) || !validacionTextoSerie($synopsisSerie)) {
+        throw new InvalidArgumentException("Error funcion updateSerie: parametro 'synopsisSerie' debe ser una cadena (string) valida sin caracteres especiales.");
+    }
+
+    $model = new Series($idSerie, $titleSerie, $idPlatform, $synopsisSerie);
     try{
         $isEdited = $model->update();
     }catch (Exception $error) {
@@ -81,7 +92,7 @@ function getSerieData($idSerie){
     if (!is_int($idSerie)) {
         throw new InvalidArgumentException("Error funcion getPlatformData: parametro 'idPlatform' debe ser un número entero (int).");
     }
-    $platform = new Series($idSerie,null, null);
+    $platform = new Series($idSerie,null, null, null);
     try{
         $platformObject = $platform->getItem();
     }catch (Exception $error) {
@@ -100,7 +111,7 @@ function deleteSerie ($idSerie){
     if (!is_int($idSerie)) {
         throw new InvalidArgumentException("Error funcion deletePlatform: parametro 'idSerie' debe ser un número entero (int).");
     }
-    $platform = new Series($idSerie,null,null);
+    $platform = new Series($idSerie,null,null,null);
     try{
         $platformDeleted = $platform->delete();
     }catch (Exception $error) {

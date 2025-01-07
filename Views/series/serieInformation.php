@@ -110,8 +110,19 @@ $lenguageDict = listLanguagesBySerie($serieId);
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th class="text-center fw-bold align-middle" rowspan="3" style="width: 20%;">Plataformas</th>  
+                    <th class="text-center fw-bold align-middle" rowspan="3" style="width: 20%;">Plataforma</th>  
                     <td><?php echo $platformObjt->getName()?></td>
+                </tr>
+            </thead>
+        </table>
+
+        </br>
+        <!-- Synopsis -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center fw-bold align-middle" rowspan="3" style="width: 20%;">Sinopsis</th>  
+                    <td><?php echo $serieInformation->getSynopsis()?></td>
                 </tr>
             </thead>
         </table>

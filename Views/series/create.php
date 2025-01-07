@@ -40,11 +40,12 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/platformsC
             //Check if POST variable serieTitle was assigned to create a platform
             //If platform Name exists
 
-            if (isset($_POST["serieTitle"]) && isset($_POST['platform'])){
+            if (isset($_POST["serieTitle"]) && isset($_POST['platform']) && isset($_POST['synopsis'])){
                 $serieTitle = $_POST["serieTitle"];
+                $serieSynopsis = $_POST['synopsis'];
 
                 try{
-                $serieCreated = createSerie($serieTitle,(int)$_POST['platform']);
+                $serieCreated = createSerie($serieTitle, (int)$_POST['platform'], $serieSynopsis);
                 } catch (Exception $error){
                     $serieCreated = $error->getMessage();
                 }
@@ -76,6 +77,12 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/platformsC
                     <div class="mb-3">
                         <label for="serieTitle" class="form-label"></label>
                         <input id="serieTitle" name="serieTitle" type="text" class="form-control" placeholder="Introduce titulo de la serie" value="" required>
+                    </div>
+
+                    <!-- Input synopsis -->
+                    <div class="mb-3">
+                        <label for="synopsis" class="form-label"></label>
+                        <textarea id="synopsis" name="synopsis" class="form-control" placeholder="Introduce sinopsis de la serie" rows="4" required></textarea>
                     </div>
 
                     <!-- Combo Box for Platform -->

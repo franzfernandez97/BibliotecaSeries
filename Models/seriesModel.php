@@ -6,12 +6,14 @@ class Series {
     private $table = "series";
     private $id;
     private $title;
+    private $synopsis;
     private $platformid;
 
-    public function __construct($idSeries = null,$titleSeries = null,$idPlatform = null){
+    public function __construct($idSeries = null,$titleSeries = null,$idPlatform = null, $synopsis = null){
         $this->id = $idSeries;
         $this->title = $titleSeries;
         $this->platformid = $idPlatform; 
+        $this->synopsis = $synopsis;
     }
 
     //Getter
@@ -27,6 +29,10 @@ class Series {
         return $this->platformid;
     }
 
+    public function getSynopsis():string{
+        return $this->synopsis;
+    }
+
     //Setter
     public function setId($id){
         $this->id = $id;
@@ -39,6 +45,11 @@ class Series {
     public function setplatformid($platformid){
         $this->platformid = $platformid;
     }
+
+    public function setSynopsis($synopsis){
+        $this->title = $synopsis;
+    }
+
 
     // READ: Get all series
     public function getAll() {
@@ -86,8 +97,8 @@ class Series {
             if ($result->num_rows <= 0) {
 
                 //if dont exits its going to create it
-                $insertStmt = $mysqli->prepare("INSERT INTO $this->table (title,platformid) VALUES (?,?)");
-                $insertStmt->bind_param("si", $this->title, $this->platformid);
+                $insertStmt = $mysqli->prepare("INSERT INTO $this->table (title,platformid,synopsis) VALUES (?,?,?)");
+                $insertStmt->bind_param("sis", $this->title, $this->platformid, $this->synopsis);
 
                 if ($insertStmt->execute()) {
                     $serieCreated = true;  // Platform created successfully
@@ -122,7 +133,7 @@ class Series {
         //if exist a result
         if ($result->num_rows > 0){
             foreach ($result as $item){
-                $itemObject = new Series($item["id"], $item["title"], $item['platformid']);
+                $itemObject = new Series($item["id"], $item["title"], $item['platformid'], $item['synopsis']);
                 return $itemObject;
             }
         }
@@ -139,8 +150,8 @@ class Series {
             }
 
             // Prepare the update statement to prevent SQL injection
-            $stmt = $mysqli->prepare("UPDATE $this->table SET title=?,platformid = ?  WHERE id = ?");
-            $stmt->bind_param("sii", $this->title, $this->platformid,$this->id);  // 's' for string (name), 'i' for integer (id)
+            $stmt = $mysqli->prepare("UPDATE $this->table SET title=?,platformid = ?,synopsis = ?  WHERE id = ?");
+            $stmt->bind_param("sisi", $this->title, $this->platformid,$this->synopsis,$this->id);  // 's' for string (name), 'i' for integer (id)
             
             // Execute the statement
             if ($stmt->execute()) {

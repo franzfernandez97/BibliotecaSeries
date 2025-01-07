@@ -48,9 +48,9 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/platformsC
             }
 
             if (isset($sendData)){
-                if (isset($_POST["serieTitle"]) && isset($_POST['platform'])){
+                if (isset($_POST["serieTitle"]) && isset($_POST['platform']) && isset($_POST['synopsis'])){
                     try{
-                    $serieEdited = updateSerie((int)$_POST["serieId"], $_POST["serieTitle"], (int)$_POST['platform']);
+                    $serieEdited = updateSerie((int)$_POST["serieId"], $_POST["serieTitle"], (int)$_POST['platform'],$_POST['synopsis'] );
                     } catch (Exception $error){
                         $serieEdited = $error->getMessage();
                     }
@@ -81,6 +81,12 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/BibliotecaSeries/controllers/platformsC
                         <label for="serieTitle" class="form-label"></label>
                         <input id="serieTitle" name="serieTitle" type="text" class="form-control" placeholder="Ingresa un titulo" value="<?php echo $serieObject->getTitle()?>" required>
                         <input type="hidden" name="serieId" value="<?php echo $serieObject->getId(); ?>">
+                    </div>
+
+                    <!-- Input synopsis -->
+                    <div class="mb-3">
+                        <label for="synopsis" class="form-label"></label>
+                        <textarea id="synopsis" name="synopsis" class="form-control" placeholder="Introduce sinopsis de la serie" rows="4" required><?php echo $serieObject->getSynopsis(); ?></textarea>
                     </div>
 
                     <!-- Combo Box for Platform -->
